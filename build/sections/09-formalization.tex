@@ -1,7 +1,7 @@
 \section{Lean formalization}\label{app:formalization}
 
 All theorems of the paper are formalized in Lean~4 (toolchain \texttt{v4.34.1}) in the
-directory \path{lean/WangLogic/} accompanying this paper.
+directory \path{lean/WangLogic/} of the repository given under Code availability.
 \path{Basic.lean} covers Sections~\ref{sec:setting}--\ref{sec:foundation} except the extensions
 below and uses only the core library. The other files use Mathlib~\cite{mathlib} (commit
 \texttt{d13f23b7}): \path{Confirmation.lean} (\cref{rem:probability} and
@@ -13,7 +13,8 @@ below and uses only the core library. The other files use Mathlib~\cite{mathlib}
 \texttt{Quot.sound} and \texttt{Classical.choice}. The project builds with
 \begin{center}\texttt{cd lean \&\& lake exe cache get \&\& lake build}\end{center}
 The file \path{lean/ComparatorChallenges/InductionNotDeduction.json} states
-\cref{thm:hume} for independent checking with the Comparator tool. Not formalized: Landauer's
+\cref{thm:hume} for independent checking with the Comparator tool
+(\url{https://github.com/leanprover/comparator}). Not formalized: Landauer's
 principle, the inequality $H(T\mid S)\le H(T)$, and the physical implementations and experimental
 proposals of \cref{sec:quantum}.
 

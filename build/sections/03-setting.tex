@@ -14,9 +14,8 @@ A thought $\varphi$ \emph{entails} $\psi$, written $\varphi\models\psi$, if
 $\{w\in\W : \varphi(w)\}\subseteq\{w\in\W : \psi(w)\}$.
 \end{definition}
 
-Entailment is a relation, not a function: a thought entails many conclusions. This replaces the
-map $f:\Phi\to\exists$ of the 2025 version, which could not assign a single conclusion to each
-thought.
+Entailment is a relation, not a function: a thought entails many conclusions, so no map
+$\Phi\to\exists$ could assign to each thought its single conclusion.
 
 \begin{definition}[Polarity]
 The polarities are $\up$ and $\down$. For a proposition $p$, set $p^{\up}=p$ and $p^{\down}=\neg p$.
@@ -33,10 +32,10 @@ $o_k$:
 \end{definition}
 
 \begin{remark}\label{rem:probability}
-The 2025 version required $P(T_\varphi\mid S_\exists)>0$. That quantity is undefined when the
-study has probability zero. If $\W$ is finite and $P$ gives every world positive probability,
+A probabilistic reading of the circular arrow would require $P(t\mid s)>0$. That quantity is
+undefined when the study has probability zero. If $\W$ is finite and $P$ gives every world positive probability,
 then $P(t\wedge s)>0$ holds exactly when $s\circlearrowright t$, so \cref{def:support} is the
-qualitative content of the original condition and needs no choice of prior. (The same holds for
+qualitative content of the probabilistic condition and needs no choice of prior. (The same holds for
 countable $\W$; the Lean proof treats the finite case.) A quantitative refinement is given in
 \cref{sec:confirmation}.
 \lean{Prior.prob\_and\_pos\_iff\_supported}

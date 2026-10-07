@@ -1,7 +1,8 @@
 # [A Philosophical-Mathematical Representation of Deductive and Inductive Logic: A Diagrammatic and Formal Analysis](paper.pdf)
 
 **Author:** Hsuan Fu Wang  
-**Date:** Preprint draft, October 7, 2026 (revised from the [February 2025 version](original.pdf))
+**Date:** Submission version, October 2026 (revised from the [February 2025 version](original.pdf))  
+**Submission package:** [`submission/`](submission/) (PDF, arXiv source, metadata and checklist)
 
 Section 7 is an application to quantum information theory, adapted from the companion manuscript
 [*A Quantum Information Theoretic Model for the Philosophical-Mathematical Representation of
@@ -15,7 +16,7 @@ formalized in Lean with Mathlib; see below.
   author = {Hsuan Fu Wang},
   title = {{A Philosophical-Mathematical Representation of Deductive and Inductive Logic:
             A Diagrammatic and Formal Analysis}},
-  note = {Preprint draft},
+  note = {Submitted},
   year = {2026}
 }
 ```

@@ -12,6 +12,20 @@ picture, with a straight arrow for deduction, a circular arrow for induction, an
 iterations, hypotheses, levels, binary states and polarities. We then give the diagram a precise
 semantics and prove what it asserts.
 
+\paragraph{Related work.} Diagrams as rigorous logical representations go back to Peirce and
+have been given formal semantics, for example for Venn diagrams by Shin~\cite{shin}; our diagram
+differs in depicting two modes of inference and their interaction rather than the content of a
+single argument. The semantics of \cref{sec:setting} is the standard possible-worlds
+reading of propositions~\cite{kripke}. Our qualitative notion of support is the consistency
+requirement underlying confirmation theory~\cite{hempel}, and its quantitative refinement in
+\cref{sec:confirmation} is Bayesian incremental confirmation~\cite{carnap,earman,fitelson}.
+Falsification follows Popper~\cite{popper}, and the treatment of defeasible inference in
+\cref{sec:defeasible} uses the preferential semantics of Kraus, Lehmann and
+Magidor~\cite{klm,makinson}. The quantum model draws on quantum logic~\cite{birkhoff,dallachiara}
+and quantum state tomography~\cite{hradil,nielsen}. Machine-checked formalization of philosophical
+arguments has been pursued with automated and interactive provers~\cite{fitelsonzalta,benzmuller};
+we use Lean~4 and Mathlib~\cite{lean4,mathlib}.
+
 \paragraph{Contributions.}
 \begin{enumerate}
   \item A diagrammatic framework for deduction $\varphi\to\exists$ and induction
@@ -33,3 +47,9 @@ semantics and prove what it asserts.
         Sections~\ref{sec:deduction}--\ref{sec:quantum} in Lean~4~\cite{lean4} and
         Mathlib~\cite{mathlib} (Appendix~\ref{app:formalization}).
 \end{enumerate}
+
+\paragraph{Outline.} \Cref{sec:framework} presents the diagram and \cref{sec:setting} its
+semantics. \Cref{sec:deduction,sec:induction,sec:foundation} prove the results for deduction,
+induction and the foundation, including the extensions. \Cref{sec:quantum} develops the quantum
+model, \cref{sec:discussion} discusses the results and their limitations, and
+Appendix~\ref{app:formalization} maps every result to its Lean declaration.
