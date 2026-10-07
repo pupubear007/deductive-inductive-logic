@@ -1,4 +1,4 @@
-# A Philosophical-Mathematical Representation of Deductive and Inductive Logic: A Diagrammatic and Formal Analysis
+# Deduction and Induction in One Diagram: A Machine-Checked Semantics with Applications to Quantum Information and Plant Disease Diagnosis
 
 [![CI](https://github.com/pupubear007/deductive-inductive-logic/actions/workflows/ci.yml/badge.svg)](https://github.com/pupubear007/deductive-inductive-logic/actions/workflows/ci.yml)
 

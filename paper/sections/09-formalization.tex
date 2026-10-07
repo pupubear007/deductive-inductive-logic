@@ -8,7 +8,9 @@ below and uses only the core library. The other files use Mathlib~\cite{mathlib}
 \cref{sec:confirmation}), \path{Defeasible.lean} (\cref{sec:defeasible}), \path{Levels.lean}
 (\cref{sec:levels}), \path{Quantum.lean}
 (\cref{prop:qsound,prop:classical,prop:qhume}) and \path{QuantumExtensions.lean}
-(\cref{prop:unitary,prop:nondistrib,prop:noise} and entropy invariance). No file contains
+(\cref{prop:unitary,prop:nondistrib,prop:noise} and entropy invariance), and \path{Plant.lean}
+(\cref{sec:plant}), which uses only the core library besides \path{Basic.lean} and
+\path{Defeasible.lean}. No file contains
 \texttt{sorry}, and every declaration depends at most on the axioms \texttt{propext},
 \texttt{Quot.sound} and \texttt{Classical.choice}. The project builds with
 \begin{center}\texttt{cd lean \&\& lake exe cache get \&\& lake build}\end{center}
@@ -79,6 +81,17 @@ Result & Lean declaration (namespace \texttt{WangLogic}) \\
 \Cref{prop:nondistrib} & \texttt{quantum\_not\_distributive} \\
 Entropy invariance (\cref{sec:quantum}) & \texttt{vonNeumannEntropy\_unitary\_conj} \\
 \Cref{prop:noise} & \texttt{born\_depolarize\_ge}, \texttt{noisy\_spinUp\_not\_refuted} \\
+\midrule
+\Cref{def:resolves} & \texttt{AssayResult}, \texttt{Resolves} \\
+\Cref{thm:resolves} & \texttt{resolves\_iff} \\
+\Cref{cor:undetermined} & \texttt{undetermined}, \texttt{Resolves.pair\_left} \\
+\Cref{ex:fusarium} & \texttt{morphology\_not\_resolves}, \\
+ & \texttt{hostTest\_resolves} \\
+\Cref{prop:koch} & \texttt{confirms\_of\_entails}, \texttt{modus\_tollens} \\
+\Cref{prop:plantconfirm} & \texttt{positive\_raises\_risk\_iff} \\
+\Cref{prop:sclerotinia} & \texttt{apothecia\_normally\_infected}, \\
+ & \texttt{noApothecia\_normally\_not\_infected}, \\
+ & \texttt{sclerotinia\_nonmonotone} \\
 \bottomrule
 \end{tabular}
 \end{center}

@@ -4,3 +4,4 @@ import WangLogic.Defeasible
 import WangLogic.Levels
 import WangLogic.Quantum
 import WangLogic.QuantumExtensions
+import WangLogic.Plant

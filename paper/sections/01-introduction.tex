@@ -22,7 +22,9 @@ requirement underlying confirmation theory~\cite{hempel}, and its quantitative r
 Falsification follows Popper~\cite{popper}, and the treatment of defeasible inference in
 \cref{sec:defeasible} uses the preferential semantics of Kraus, Lehmann and
 Magidor~\cite{klm,makinson}. The quantum model draws on quantum logic~\cite{birkhoff,dallachiara}
-and quantum state tomography~\cite{hradil,nielsen}. Machine-checked formalization of philosophical
+and quantum state tomography~\cite{hradil,nielsen}. The plant-pathology application draws on
+quantitative work on diagnosis, forecasting and decision-making in plant disease
+epidemiology~\cite{hughes1999,madden2007,willbur2018}. Machine-checked formalization of philosophical
 arguments has been pursued with automated and interactive provers~\cite{fitelsonzalta,benzmuller};
 we use Lean~4 and Mathlib~\cite{lean4,mathlib}.
 
@@ -40,16 +42,21 @@ we use Lean~4 and Mathlib~\cite{lean4,mathlib}.
         deductive and inductive theorems (\cref{prop:qsound,prop:qhume}); the classical
         framework as the commuting case (\cref{prop:classical}); and physical implementations,
         a thermodynamic reading and experimental proposals.
+  \item An application to plant disease diagnosis and forecasting (\cref{sec:plant}): an
+        assay-resolution theorem (\cref{thm:resolves}) that gives the hypothesis index $h$ a
+        concrete reading, Koch's postulates as hypothetico-deductive confirmation
+        (\cref{prop:koch}), and diagnostic tests and forecasts as confirmation and defeasible
+        inference (\cref{prop:plantconfirm,prop:sclerotinia}).
   \item Three extensions: Bayesian confirmation as the quantitative inductive polarity
         (\cref{sec:confirmation}), defeasible inference (\cref{sec:defeasible}), and ordered
         levels (\cref{sec:levels}).
   \item A machine-checked formalization of every theorem of
-        Sections~\ref{sec:deduction}--\ref{sec:quantum} in Lean~4~\cite{lean4} and
+        Sections~\ref{sec:deduction}--\ref{sec:plant} in Lean~4~\cite{lean4} and
         Mathlib~\cite{mathlib} (Appendix~\ref{app:formalization}).
 \end{enumerate}
 
 \paragraph{Outline.} \Cref{sec:framework} presents the diagram and \cref{sec:setting} its
 semantics. \Cref{sec:deduction,sec:induction,sec:foundation} prove the results for deduction,
 induction and the foundation, including the extensions. \Cref{sec:quantum} develops the quantum
-model, \cref{sec:discussion} discusses the results and their limitations, and
+model and \cref{sec:plant} the application to plant pathology, \cref{sec:discussion} discusses the results and their limitations, and
 Appendix~\ref{app:formalization} maps every result to its Lean declaration.
