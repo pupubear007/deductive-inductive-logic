@@ -1,0 +1,71 @@
+\section{The diagrammatic framework}\label{sec:framework}
+
+The diagram has two primary rows and a foundation (\cref{fig:framework}).
+
+\begin{itemize}
+  \item \textbf{Deduction}, $\varphi\to\exists$. A thought $\varphi$ (premises) leads to an
+        existence $\exists$ (a conclusion) along a straight arrow, read \emph{hence}. The passage
+        is certain. Polarity $\up$ marks an affirmed conclusion and $\down$ a negated one.
+  \item \textbf{Induction}, $s\exists\circlearrowright t\varphi$. The study of existence $s\exists$
+        (observations) leads to a theory of thought $t\varphi$ (a hypothesis) along a circular
+        arrow, read \emph{conclude}. The passage is tentative and is repeated as new observations
+        arrive.
+  \item \textbf{Foundation}. Iterations $i$, hypotheses $h$ and levels $l$, together with binary
+        states $0,1$ and polarities $\up,\down$, generate the thoughts used above.
+\end{itemize}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[
+    node distance=12mm and 30mm,
+    box/.style={draw,rounded corners,minimum width=28mm,minimum height=9mm,align=center},
+    found/.style={draw,dotted,circle,minimum size=10mm,inner sep=1pt},
+    >={Stealth[length=2.5mm]}]
+  \node[box] (phi) {thought $\varphi$};
+  \node[box,right=of phi] (ex) {existence $\exists^{\up/\down}$};
+  \draw[->,thick] (phi) -- node[above]{\small hence} node[below]{\small certain} (ex);
+
+  \node[box,below=of phi] (s) {study $s\exists$};
+  \node[box,below=of ex] (t) {theory $t\varphi^{\up/\down}$};
+  \draw[->,thick] (s) to[bend left=18] node[above]{\small conclude} (t);
+  \draw[->,thick,dashed] (t) to[bend left=18] node[below]{\small iterate $i$: new observations} (s);
+
+  \draw[->,densely dotted] (ex) -- node[right,align=left]{\small observed}(t.north -| ex.south);
+  \coordinate (mid) at ($(s.south)!0.5!(t.south)$);
+  \node[found,below=14mm of mid,xshift=-36mm] (i) {$i$};
+  \node[found,right=8mm of i] (h) {$h$};
+  \node[found,right=8mm of h] (l) {$l$};
+  \node[found,right=8mm of l] (b) {$0,1$};
+  \node[found,right=8mm of b] (p) {$\up,\down$};
+  \draw[red!70!black,dashed] (i) -- (h) -- (l) -- (b) -- (p);
+  \node[below=3mm of l] {\small foundation $m : I\times H\times L\times\{0,1\}\to\Phi$};
+\end{tikzpicture}
+\caption{Deduction (top row), induction (middle row) and the foundation (bottom).}
+\label{fig:framework}
+\end{figure}
+
+\Cref{tab:symbols} fixes the reading of each symbol. One change from the 2025 version: the
+symbol $\exists$ is kept for the diagram only, and the set of possible existences is written
+$\W$, so that it is not confused with the existential quantifier.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}lll@{}}
+\toprule
+Symbol & Informal meaning & Formal reading (\cref{sec:setting}) \\
+\midrule
+$\varphi$ & thought & proposition $\varphi:\W\to\mathrm{Prop}$ \\
+$\exists$ & existence & proposition about worlds; $\W$ is the set of worlds \\
+$s$ & study & list of observations \\
+$t$ & theory & proposition about worlds \\
+$\to$ & hence & semantic entailment $\models$ \\
+$\circlearrowright$ & conclude & support (\cref{def:support}) \\
+$i$ & iteration & adding an observation to a study \\
+$h$, $l$ & hypothesis, level & indices of the foundation map $m$ \\
+$0,1$ & binary state & truth values \\
+$\up,\down$ & polarity & affirmation, negation \\
+\bottomrule
+\end{tabular}
+\caption{Symbols of the framework.}
+\label{tab:symbols}
+\end{table}

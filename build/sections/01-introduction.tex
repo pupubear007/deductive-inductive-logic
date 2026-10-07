@@ -1,0 +1,26 @@
+\section{Introduction}\label{sec:intro}
+
+Deductive logic derives particular conclusions from general premises with certainty: all men are
+mortal; Socrates is a man; therefore Socrates is mortal~\cite{aristotle}. Inductive logic builds
+general theories from particular observations with only tentative support: many swans have been
+seen to be white, so perhaps all swans are white. Textual arguments and static diagrams, such as
+Venn diagrams and Peirce's existential graphs~\cite{peirce}, show the structure of a single
+inference well but do not show reasoning as a process in which deduction and induction alternate.
+
+This paper proposes a diagram (\cref{fig:framework}) that places both modes of reasoning in one
+picture, with a straight arrow for deduction, a circular arrow for induction, and a foundation of
+iterations, hypotheses, levels, binary states and polarities. We then give the diagram a precise
+semantics and prove what it asserts.
+
+\paragraph{Contributions.}
+\begin{enumerate}
+  \item A diagrammatic framework for deduction $\varphi\to\exists$ and induction
+        $s\exists\circlearrowright t\varphi$ (\cref{sec:framework}).
+  \item A possible-worlds semantics for every symbol of the diagram (\cref{sec:setting}).
+  \item Theorems for each mode: soundness, transitivity and modus tollens for deduction
+        (\cref{sec:deduction}); monotone refinement, falsification and the failure of
+        induction as deduction (\cref{thm:hume}) for induction (\cref{sec:induction}); and a
+        truth-value characterization of the foundation (\cref{sec:foundation}).
+  \item A machine-checked formalization of all of these results in Lean~4~\cite{lean4}
+        (Appendix~\ref{app:formalization}).
+\end{enumerate}

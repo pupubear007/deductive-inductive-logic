@@ -11,6 +11,7 @@ sources:
   - title: "A Philosophical-Mathematical Representation of Deductive and Inductive Logic: A Diagrammatic and Formal Analysis"
     authors: ["Hsuan Fu Wang"]
     id: ../paper.pdf
+    # Revised preprint draft; the February 2025 version is ../original.pdf.
     type: article
 
 status:

@@ -1,0 +1,24 @@
+\section{The foundation}\label{sec:foundation}
+
+\begin{definition}[Foundation map]
+Let $I$, $H$, $L$ be sets of iterations, hypotheses and levels, and let
+$\beta:I\times H\times L\to\Phi$ assign a base thought to each index. The \emph{foundation map}
+$m:I\times H\times L\times\{0,1\}\to\Phi$ is
+\[
+  m(i,h,l,1)=\beta(i,h,l),\qquad m(i,h,l,0)=\neg\beta(i,h,l).
+\]
+\end{definition}
+
+Thus state $1$ carries polarity $\up$ and state $0$ carries polarity $\down$. In the 2025 version
+$m$ took values in $\Phi\cup\exists$; since existences are thoughts (\cref{sec:setting}), the
+codomain is simply $\Phi$.
+
+\begin{proposition}[The binary state is the truth value]\label{prop:m}
+For every world $w$ and $b\in\{0,1\}$, $m(i,h,l,b)(w)$ holds if and only if $\beta(i,h,l)(w)$
+agrees with $b$, that is, $\beta(i,h,l)(w)\iff b=1$.
+\lean{m\_spec}
+\end{proposition}
+
+\begin{proof}
+For $b=1$ both sides say $\beta(i,h,l)(w)$. For $b=0$ both sides say $\neg\beta(i,h,l)(w)$.
+\end{proof}

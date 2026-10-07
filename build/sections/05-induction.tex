@@ -1,0 +1,71 @@
+\section{Induction}\label{sec:induction}
+
+\subsection{Iterative refinement}
+
+Iteration $i$ adds an observation to a study. The following results say that iteration can only
+narrow the set of supported theories, which is the precise sense in which induction refines.
+
+\begin{proposition}\label{prop:cons}
+If $(o,o_1,\dots,o_n)\circlearrowright t$, then $(o_1,\dots,o_n)\circlearrowright t$.
+\lean{Supported.of\_cons}
+\end{proposition}
+
+\begin{theorem}[Refinement is monotone]\label{thm:mono}
+If every observation of $s$ occurs in $s'$ and $s'\circlearrowright t$, then $s\circlearrowright t$.
+\lean{Supported.mono}
+\end{theorem}
+
+\begin{proof}
+A world witnessing $s'\circlearrowright t$ satisfies $t$ and every observation of $s'$, hence every
+observation of $s$. \Cref{prop:cons} is the case $s'=(o)\mathbin{+\!\!+}s$.
+\end{proof}
+
+\subsection{Falsification and the problem of induction}
+
+For the swan examples take worlds to be colourings $c:B\to\{\mathrm{true},\mathrm{false}\}$
+recording which birds are white. For a finite list $\mathit{seen}$ of birds define
+\[
+  \Seen_{\mathit{seen}}(c) :\Longleftrightarrow \forall x\in\mathit{seen},\ c(x)=\mathrm{true},
+  \qquad
+  \All(c) :\Longleftrightarrow \forall x\in B,\ c(x)=\mathrm{true}.
+\]
+
+\begin{proposition}[Falsification]\label{prop:popper}
+If $\mathrm{Swan}(b)$ and $\neg\mathrm{White}(b)$, then
+$\neg\,\forall x,\ \mathrm{Swan}(x)\to\mathrm{White}(x)$.
+\lean{falsification}
+\end{proposition}
+
+\begin{proof}
+Instantiate the universal statement at $b$.
+\end{proof}
+
+Falsification is deductive: a single observation settles the matter, in line with
+Popper~\cite{popper}. Confirmation is not, however many observations are made.
+
+\begin{theorem}[Induction is not deduction]\label{thm:hume}
+Let $B$ have decidable equality, let $\mathit{seen}$ be a finite list of birds, and let
+$b\in B$ with $b\notin\mathit{seen}$. Then $\Seen_{\mathit{seen}}\not\models\All$.
+\lean{induction\_not\_deduction}
+\end{theorem}
+
+\begin{proof}
+Define $c(x)=\mathrm{false}$ if $x=b$ and $c(x)=\mathrm{true}$ otherwise. Every $x\in\mathit{seen}$
+differs from $b$, so $c(x)=\mathrm{true}$ and $\Seen_{\mathit{seen}}(c)$ holds. But
+$c(b)=\mathrm{false}$, so $\All(c)$ fails. Hence the worlds satisfying
+$\Seen_{\mathit{seen}}$ are not contained in those satisfying $\All$.
+\end{proof}
+
+\begin{proposition}[Inductive swan]\label{prop:supported}
+For every finite list $\mathit{seen}$, $(\Seen_{\mathit{seen}})\circlearrowright\All$.
+\lean{allWhite\_supported}
+\end{proposition}
+
+\begin{proof}
+The colouring that makes every bird white satisfies both.
+\end{proof}
+
+Together, \cref{thm:hume} and \cref{prop:supported} state the asymmetry the diagram depicts:
+the theory ``all swans are white'' remains supported by every finite study, so it may be held along
+the circular arrow, but no finite study entails it, so it never travels the straight arrow. This is
+a formal version of Hume's problem of induction~\cite{hume}.

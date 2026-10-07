@@ -1,0 +1,31 @@
+\section{Lean formalization}\label{app:formalization}
+
+All results in Sections~\ref{sec:deduction}--\ref{sec:foundation} are formalized in Lean~4
+(toolchain \texttt{v4.34.1}) in the file \path{lean/WangLogic/Basic.lean} accompanying this
+paper. The formalization uses only the core library, contains no \texttt{sorry}, and depends at
+most on the axioms \texttt{propext}, \texttt{Quot.sound} and \texttt{Classical.choice}. It builds
+with
+\begin{center}\texttt{cd lean \&\& lake build}\end{center}
+The file \path{lean/ComparatorChallenges/InductionNotDeduction.json} states
+\cref{thm:hume} for independent checking with the Comparator tool. \Cref{rem:probability} is not
+formalized.
+
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Result & Lean declaration (namespace \texttt{WangLogic}) \\
+\midrule
+\Cref{def:entails} & \texttt{Entails} \\
+\Cref{def:support} & \texttt{Supported} \\
+\Cref{prop:imp} & \texttt{imp\_iff\_not\_or} \\
+\Cref{thm:sound} & \texttt{deduction\_sound} \\
+\Cref{prop:tollens} & \texttt{modus\_tollens} \\
+\Cref{prop:cons} & \texttt{Supported.of\_cons} \\
+\Cref{thm:mono} & \texttt{Supported.mono} \\
+\Cref{prop:popper} & \texttt{falsification} \\
+\Cref{thm:hume} & \texttt{induction\_not\_deduction} \\
+\Cref{prop:supported} & \texttt{allWhite\_supported} \\
+\Cref{prop:m} & \texttt{m\_spec} \\
+\bottomrule
+\end{tabular}
+\end{center}

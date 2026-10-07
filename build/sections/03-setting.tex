@@ -1,0 +1,41 @@
+\section{Formal setting}\label{sec:setting}
+
+Fix a set $\W$ of \emph{possible worlds}. Every symbol of the diagram is read as follows.
+
+\begin{definition}[Thought]
+A \emph{thought} is a proposition about worlds, that is, a map $\varphi:\W\to\mathrm{Prop}$. We
+write $\Phi$ for the set of thoughts and $\varphi(w)$ for ``$\varphi$ holds in $w$''. An
+existence is likewise a thought; the distinction between $\varphi$ and $\exists$ in the diagram is
+one of role (premise versus conclusion), not of type.
+\end{definition}
+
+\begin{definition}[Entailment]\label{def:entails}
+A thought $\varphi$ \emph{entails} $\psi$, written $\varphi\models\psi$, if
+$\{w\in\W : \varphi(w)\}\subseteq\{w\in\W : \psi(w)\}$.
+\end{definition}
+
+Entailment is a relation, not a function: a thought entails many conclusions. This replaces the
+map $f:\Phi\to\exists$ of the 2025 version, which could not assign a single conclusion to each
+thought.
+
+\begin{definition}[Polarity]
+The polarities are $\up$ and $\down$. For a proposition $p$, set $p^{\up}=p$ and $p^{\down}=\neg p$.
+\end{definition}
+
+\begin{definition}[Study and support]\label{def:support}
+A \emph{study} is a finite list $s=(o_1,\dots,o_n)$ of thoughts, the observations. A theory $t$ is
+\emph{supported} by $s$, written $s\circlearrowright t$, if some world satisfies $t$ and every
+$o_k$:
+\[
+  s\circlearrowright t \quad:\Longleftrightarrow\quad \exists\, w\in\W,\ t(w)\wedge
+  \textstyle\bigwedge_{k=1}^n o_k(w).
+\]
+\end{definition}
+
+\begin{remark}\label{rem:probability}
+The 2025 version required $P(T_\varphi\mid S_\exists)>0$. That quantity is undefined when the
+study has probability zero. If $\W$ is countable and $P$ gives every world positive probability,
+then $P(t\wedge s)>0$ holds exactly when $s\circlearrowright t$, so \cref{def:support} is the
+qualitative content of the original condition and needs no choice of prior. This remark is not
+part of the Lean formalization.
+\end{remark}

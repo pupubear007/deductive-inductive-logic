@@ -1,17 +1,28 @@
 # [A Philosophical-Mathematical Representation of Deductive and Inductive Logic: A Diagrammatic and Formal Analysis](paper.pdf)
 
 **Author:** Hsuan Fu Wang  
-**Date:** February 2025
+**Date:** Preprint draft, October 7, 2026 (revised from the [February 2025 version](original.pdf))
 
 ## Citation
 
 ```bibtex
-@misc{Wang:Deductive-Inductive-Logic-2025,
+@misc{Wang:Deductive-Inductive-Logic-2026,
   author = {Hsuan Fu Wang},
   title = {{A Philosophical-Mathematical Representation of Deductive and Inductive Logic:
             A Diagrammatic and Formal Analysis}},
-  year = {2025}
+  note = {Preprint draft},
+  year = {2026}
 }
+```
+
+## Building the PDF
+
+The LaTeX source is in [`build/`](build/) and follows the layout of the preprints in
+[`../../preprints`](../../preprints).
+
+```sh
+cd build
+pdflatex paper && bibtex paper && pdflatex paper && pdflatex paper
 ```
 
 ## Lean formalization
@@ -25,7 +36,7 @@ cd lean
 lake build
 ```
 
-| Paper | Lean |
+| 2025 version | Lean |
 |---|---|
 | §3.1 `Φ`, `∃` | `Thought W := W → Prop` over a type of possible worlds `W` |
 | §3.3 `ϕ → ∃` as `¬ϕ ∨ ∃` | `imp_iff_not_or` |
@@ -47,8 +58,9 @@ states the headline theorem in the repository's
 
 ## Revisions to the manuscript
 
-Each item below is a place where the current text cannot be stated in Lean as written; the Lean
-file shows the replacement.
+The draft in [`paper.pdf`](paper.pdf) makes each of these changes to the [2025 version](original.pdf).
+Each item is a place where the 2025 text could not be stated in Lean as written; the Lean file
+shows the replacement.
 
 1. **Rename the set of existences.** `∃` is used for the existential quantifier, the set of
    outcomes, and an element of that set. Use `W` (possible worlds) for the set and `w` for an

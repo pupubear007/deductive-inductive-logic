@@ -1,0 +1,32 @@
+\section{Discussion}\label{sec:discussion}
+
+\paragraph{Philosophy.} The straight arrow carries Descartes' movement from thought to
+existence~\cite{descartes}: what is entailed holds in every world where the premises hold
+(\cref{thm:sound}). The circular arrow carries Hume's and Popper's view of induction: a
+generalization is supported, never entailed (\cref{thm:hume}), and can be overturned by a single
+counterexample (\cref{prop:popper}). Levels $l$ in the foundation give a place for Kant's
+hierarchical structuring of thought~\cite{kant}.
+
+\paragraph{Education and cognition.} The top row of the diagram is suitable for a first course in
+logic; the foundation invites discussion of polarity and iteration. The visual layout follows
+the view that diagrams make inferential structure explicit~\cite{larkin,johnsonlaird}.
+
+\paragraph{Limitations and future work.}
+\begin{itemize}
+  \item Support (\cref{def:support}) is qualitative. A quantitative reading of the inductive
+        polarity $t\varphi^{\up}$ is Bayesian confirmation, $P(t\mid s)>P(t)$; formalizing it
+        requires a probability library such as Mathlib.
+  \item The indices $i,h,l$ of the foundation are uninterpreted sets. Giving levels an order
+        (for example observational below theoretical) would let one state that iteration moves
+        upward.
+  \item Only propositional and first-order statements over a fixed set of worlds are treated.
+        Multi-premise defeasible reasoning and higher-order logic are left open.
+  \item The diagram's usefulness for learners is an empirical claim that remains to be tested.
+\end{itemize}
+
+\section{Conclusion}
+
+We have given a diagram for deduction and induction, a possible-worlds semantics for its symbols,
+and machine-checked theorems for what it depicts: deduction is certain and transitive, negative
+polarity is modus tollens, iteration narrows the supported theories, one counterexample falsifies,
+and no finite study entails a universal theory.
