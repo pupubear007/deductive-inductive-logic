@@ -7,6 +7,17 @@ generalization is supported, never entailed (\cref{thm:hume}), and can be overtu
 counterexample (\cref{prop:popper}). Levels $l$ in the foundation give a place for Kant's
 hierarchical structuring of thought~\cite{kant}.
 
+\paragraph{Quantum analogies.} The quantum model of \cref{sec:quantum} suggests three further
+analogies, which we state as analogies rather than results.
+\emph{Complementarity}: as quantum objects show wave and particle aspects, reasoning involves both
+abstract thought ($\varphi$) and concrete existence ($\exists$).
+\emph{Uncertainty}: incompatible observables cannot both be sharp, which is a physical limitation on
+what any study can reveal, distinct from Hume's logical one (\cref{prop:qhume}(4)).
+\emph{Entanglement}: entangled systems show correlations that no classical model reproduces,
+suggesting that logical relations between parts of a system need not reduce to relations between
+the parts; these correlations cannot be used to signal, so they do not conflict with causality.
+These views connect to the idea that physical processes are computations~\cite{deutsch,lloyd}.
+
 \paragraph{Education and cognition.} The top row of the diagram is suitable for a first course in
 logic; the foundation invites discussion of polarity and iteration. The visual layout follows
 the view that diagrams make inferential structure explicit~\cite{larkin,johnsonlaird}.
@@ -21,6 +32,11 @@ the view that diagrams make inferential structure explicit~\cite{larkin,johnsonl
         upward.
   \item Only propositional and first-order statements over a fixed set of worlds are treated.
         Multi-premise defeasible reasoning and higher-order logic are left open.
+  \item The quantum model is limited in practice by decoherence, state-preparation and
+        measurement errors, and scale~\cite{preskill,arute}. Error-corrected and topological
+        implementations, and hybrid quantum--classical reasoning, are natural next steps.
+  \item The results of \cref{sec:quantum} are not yet formalized; Mathlib's theory of inner
+        product spaces and orthogonal projections would support this.
   \item The diagram's usefulness for learners is an empirical claim that remains to be tested.
 \end{itemize}
 
@@ -29,4 +45,8 @@ the view that diagrams make inferential structure explicit~\cite{larkin,johnsonl
 We have given a diagram for deduction and induction, a possible-worlds semantics for its symbols,
 and machine-checked theorems for what it depicts: deduction is certain and transitive, negative
 polarity is modus tollens, iteration narrows the supported theories, one counterexample falsifies,
-and no finite study entails a universal theory.
+and no finite study entails a universal theory. Realized in quantum information theory, the same
+structure appears as certain measurement and unitary evolution on one side and state tomography on
+the other, with the classical framework as the commuting case and with a new, physical limit on
+induction. This suggests that quantum mechanics offers a natural physical setting for the
+interplay of deduction and induction.

@@ -3,6 +3,10 @@
 **Author:** Hsuan Fu Wang  
 **Date:** Preprint draft, October 7, 2026 (revised from the [February 2025 version](original.pdf))
 
+Section 7 is an application to quantum information theory, adapted from the companion manuscript
+[*A Quantum Information Theoretic Model for the Philosophical-Mathematical Representation of
+Deductive and Inductive Logic*](original-quantum.pdf) (February 2025). It is not formalized in Lean.
+
 ## Citation
 
 ```bibtex

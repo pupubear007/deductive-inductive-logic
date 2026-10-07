@@ -1,0 +1,204 @@
+\section{Application: a quantum information model}\label{sec:quantum}
+
+This section gives a physical realization of the framework in quantum information theory. Thoughts
+become subspaces of a Hilbert space, deduction becomes certain measurement and unitary evolution,
+induction becomes quantum state tomography, and the binary and polarized foundation becomes qubits
+and spins. The classical setting of \cref{sec:setting} reappears as the special case in which all
+observables commute (\cref{prop:classical}). Unlike Sections~\ref{sec:deduction}--\ref{sec:foundation},
+the results of this section are not yet formalized in Lean.
+
+Throughout, $\Hil$ is a finite-dimensional complex Hilbert space, a \emph{state} is a unit vector
+$\ket v\in\Hil$ or a density operator $\rho$, and a \emph{projector} is an operator $P$ with
+$P=P^\dagger=P^2$. For projectors, $P\le Q$ means $\operatorname{ran}P\subseteq\operatorname{ran}Q$,
+equivalently $QP=P$. Physical time is written $\tau$, to keep $t$ for theories.
+
+\subsection{Dictionary}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}l>{\raggedright}p{0.36\textwidth}>{\raggedright\arraybackslash}p{0.3\textwidth}@{}}
+\toprule
+Symbol & Quantum entity & Physical meaning \\
+\midrule
+$\varphi$ (thought) & projector $P_\varphi$, or a state $\ket v$ & a property; a superposition of possibilities \\
+$\exists$ (existence) & eigenstate $\ket n$ & a definite measurement outcome \\
+$\models$ (hence) & $P_\varphi\le P_\psi$ & subspace inclusion \\
+$s$ (study) & outcomes of measurements $\{P_n\}$ & observed statistics \\
+$t$ (theory) & reconstructed state $\hat\rho$, or model $U(\theta)$ & hypothesis about the system \\
+$i$ (iteration) & $U(\tau)=e^{-i\hat H\tau/\hbar}$, circuit layers, adaptive rounds & refinement in time \\
+$h$ (hypothesis) & measurement basis $\{\ket{n}\}$ & what is asked of the system \\
+$l$ (level) & energy levels $E_n$ of $\hat H$ & hierarchical structure \\
+$0,1$ (binary) & qubit basis $\ket0,\ket1$ & computational basis \\
+$\up,\down$ (polarity) & spin states $\ket\up,\ket\down$; $P^{\down}=I-P$ & affirmation, negation \\
+\bottomrule
+\end{tabular}
+\caption{Quantum realization of the symbols of \cref{tab:symbols}.}
+\label{tab:quantum}
+\end{table}
+
+\subsection{Deduction as certain measurement}
+
+A thought $\varphi$ is realized by a projector $P_\varphi$: the property ``the system lies in
+$\operatorname{ran}P_\varphi$''. Entailment is subspace inclusion, and negative polarity is the
+orthogonal complement, $P^{\down}=I-P$.
+
+\begin{proposition}[Quantum deductive certainty]\label{prop:qsound}
+Let $P_\varphi\le P_\psi$ and let $\ket v$ be a state with $P_\varphi\ket v=\ket v$. Then measuring
+$\{P_\psi,\,I-P_\psi\}$ on $\ket v$ yields $P_\psi$ with probability
+$\bra v P_\psi\ket v=1$. Moreover $I-P_\psi\le I-P_\varphi$.
+\end{proposition}
+
+\begin{proof}
+Since $P_\psi P_\varphi=P_\varphi$, we get $P_\psi\ket v=P_\psi P_\varphi\ket v=P_\varphi\ket v=\ket v$,
+so $\bra v P_\psi\ket v=\braket vv=1$. For the second claim,
+$(I-P_\varphi)(I-P_\psi)=I-P_\psi-P_\varphi+P_\varphi P_\psi=I-P_\psi$, using
+$P_\varphi P_\psi=(P_\psi P_\varphi)^\dagger=P_\varphi$.
+\end{proof}
+
+\Cref{prop:qsound} is the quantum form of \cref{thm:sound} and \cref{prop:tollens}. Unitary
+evolution is deductive in the same sense: $\ket v\mapsto U\ket v$ is deterministic, and if
+$UP_\varphi U^\dagger\le P_\psi$ then every state with property $\varphi$ is carried to one with
+property $\psi$. A general measurement is not certain. For a projective measurement $\{P_n\}$ with
+$\sum_n P_n=I$ and $P_nP_m=\delta_{nm}P_n$, the Born rule gives
+\[
+  \ket v\ \longmapsto\ \frac{P_n\ket v}{\lVert P_n\ket v\rVert}
+  \quad\text{with probability}\quad p(n)=\bra vP_n\ket v .
+\]
+What is deduced from the state is the distribution $p$, not the individual outcome. For a spin,
+$\ket v=\alpha\ket\up+\beta\ket\down$ yields $\ket\up$ with probability $|\alpha|^2$ and
+$\ket\down$ with probability $|\beta|^2$; certainty is the case $|\alpha|=1$ or $|\beta|=1$.
+
+\begin{proposition}[The classical framework is the commuting case]\label{prop:classical}
+Let $\{\ket n\}_{n\in\W}$ be an orthonormal basis indexed by the finite set of worlds $\W$, and set
+$P_\varphi=\sum_{n:\,\varphi(n)}\ket n\!\bra n$. Then
+\begin{enumerate}
+  \item $P_\varphi\le P_\psi$ if and only if $\varphi\models\psi$, and $P_{\neg\varphi}=I-P_\varphi$;
+  \item if $\rho=\sum_n p_n\ket n\!\bra n$ with every $p_n>0$, then for a study
+        $s=(o_1,\dots,o_k)$ and theory $t$,
+        $\Tr\bigl(\rho\,P_t P_{o_1}\cdots P_{o_k}\bigr)>0$ if and only if $s\circlearrowright t$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) $\operatorname{ran}P_\varphi$ is spanned by the $\ket n$ with $\varphi(n)$, and such a basis vector
+lies in $\operatorname{ran}P_\psi$ exactly when $\psi(n)$. The second claim holds because every
+basis vector satisfies exactly one of $\varphi$ and $\neg\varphi$.
+(2) The projectors are diagonal, so their product is the projector onto the $\ket n$ with
+$t(n)\wedge o_1(n)\wedge\dots\wedge o_k(n)$, and the trace is $\sum p_n$ over those $n$. A sum of
+positive numbers is positive exactly when it is non-empty, which is \cref{def:support}.
+\end{proof}
+
+Part~(2) realizes \cref{rem:probability} physically. Outside the commuting case the projectors
+of $\Hil$ do not form a Boolean algebra~\cite{birkhoff,vonneumann}. For a spin, with $P_{x+}$ the
+projector onto $(\ket\up+\ket\down)/\sqrt2$,
+\[
+  P_{x+}\wedge(P_{z+}\vee P_{z-})=P_{x+}\wedge I=P_{x+},
+  \qquad
+  (P_{x+}\wedge P_{z+})\vee(P_{x+}\wedge P_{z-})=0,
+\]
+so the distributive law fails. This marks where the quantum model goes beyond
+\cref{sec:deduction}: the identity of \cref{prop:imp} relies on a Boolean structure that
+incompatible observables lack.
+
+\subsection{Induction as state tomography}
+
+In the quantum model a study is a record of outcomes $n_1,\dots,n_N$ obtained by measuring
+identical copies of an unknown state, and a theory is a state $\rho$ that explains them. The
+likelihood of $\rho$ is $L_N(\rho)=\prod_{k=1}^N\Tr(\rho P_{n_k})$, and $\rho$ is \emph{supported}
+when $L_N(\rho)>0$. Maximum-likelihood tomography selects
+\[
+  \hat\rho_{\mathrm{ML}}=\arg\max_\rho\ \prod_{k=1}^N\Tr(\rho P_{n_k}),
+\]
+and adaptive tomography chooses the next basis from the outcomes so far,
+\[
+  h_{k+1}=f(n_1,\dots,n_k;\,h_1,\dots,h_k).
+\]
+This is the circular arrow $s\exists\circlearrowright
+t\varphi$ with iteration $i$ indexing the rounds.
+
+\begin{proposition}[Quantum refinement, falsification and underdetermination]\label{prop:qhume}
+\leavevmode
+\begin{enumerate}
+  \item Each further outcome can only shrink the set of supported states:
+        $L_{N+1}(\rho)>0$ implies $L_N(\rho)>0$.
+  \item Suppose $N$ measurements of $\{\ket\up\!\bra\up,\ket\down\!\bra\down\}$ all give $\up$.
+        Then $\ket\up$ is the maximum-likelihood state, yet every state
+        $\ket{\theta,\phi}=\cos\theta\ket\up+e^{i\phi}\sin\theta\ket\down$ with $0\le\theta<\pi/2$
+        is supported, with likelihood $\cos^{2N}\theta>0$.
+  \item A single outcome $\down$ refutes the theory $\ket\up$: its likelihood becomes $0$.
+  \item No number of measurements in this basis distinguishes $\ket{\theta,\phi}$ from
+        $\ket{\theta,\phi'}$: their outcome statistics are equal for all $\phi,\phi'$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) $L_{N+1}(\rho)=L_N(\rho)\Tr(\rho P_{n_{N+1}})$ and the second factor is at most $1$.
+(2) $\bra{\theta,\phi}\,\up\rangle\langle\up\,\ket{\theta,\phi}=\cos^2\theta$, so the likelihood is
+$\cos^{2N}\theta$, which is positive for $\theta<\pi/2$ and largest at $\theta=0$.
+(3) $\bra\up\,\down\rangle\langle\down\,\ket\up=0$.
+(4) The outcome probabilities are $\cos^2\theta$ and $\sin^2\theta$, independent of $\phi$.
+\end{proof}
+
+Parts (1)--(3) are the quantum counterparts of \cref{thm:mono}, \cref{thm:hume} and
+\cref{prop:popper}. Part~(4) is a limitation with no classical counterpart: data from one basis
+leave the phase undetermined however much of it is collected, so a tomographically complete set
+of bases is needed. In the language of the framework, the hypothesis $h$ (the basis) bounds what
+any study can reveal.
+
+\subsection{Foundation: qubits and spins}
+
+The foundation map $m$ of \cref{sec:foundation} is realized by the projector onto $\ket b$ in the
+basis selected by $h$: state $1$ affirms and state $0$ negates, as in \cref{prop:m}. A register of
+$n$ qubits with spin degrees of freedom has states
+\[
+  \ket v=\sum_{x\in\{0,1\}^n}\ \sum_{\sigma\in\{\up,\down\}^n} c_{x,\sigma}\ket x\ket\sigma ,
+\]
+and iteration is a circuit of depth $d$, $\ket{v_{\mathrm{final}}}=U_d\cdots U_2U_1\ket{v_{\mathrm{initial}}}$.
+
+\subsection{Physical implementations}
+
+\paragraph{Deduction: quantum gates.} Single-qubit gates ($X$, $Y$, $Z$, Hadamard) and two-qubit
+gates (CNOT, CZ) act as $\ket v\mapsto U\ket v$, deterministic transformations that realize the
+straight arrow~\cite{nielsen,deutsch}.
+
+\paragraph{Induction: variational algorithms.} The variational quantum eigensolver and the quantum
+approximate optimization algorithm prepare $\ket{v(\theta)}=U(\theta)\ket0$ and update
+\[
+  \theta_{k+1}=\theta_k-\eta\,\nabla_\theta\bra{v(\theta_k)}\hat H\ket{v(\theta_k)},
+\]
+with the gradient estimated from measurement outcomes. The parameters are the theory, the
+measurements are the study, and each update is one turn of the circular arrow~\cite{preskill}.
+
+\paragraph{Induction: quantum machine learning.} Training data $\{(x_k,y_k)\}$ form the study, a
+parametrized circuit $U(\theta)$ is the theory, and training minimizes
+$L(\theta)=\sum_k\bigl|y_k-\bra{v(x_k)}M\ket{v(x_k)}\bigr|^2$ for an observable
+$M$~\cite{biamonte}.
+
+\subsection{Thermodynamic reading}
+
+Information has a physical cost. Recording a study of $N$ binary outcomes uses $N$ bits, and by
+Landauer's principle resetting that record for reuse dissipates at least $N k_B T\ln 2$ of
+heat~\cite{landauer,bennett}. The two arrows then differ thermodynamically:
+\begin{itemize}
+  \item \emph{Deduction preserves entropy.} Unitary evolution leaves the von Neumann entropy
+        $S(\rho)=-\Tr\rho\ln\rho$ unchanged, $S(U\rho U^\dagger)=S(\rho)$; no information is gained
+        or lost.
+  \item \emph{Induction lowers the observer's entropy, at a price.} Observation reduces the
+        expected Shannon entropy of the observer's belief about the theory,
+        $H(T\mid S)\le H(T)$. As with Maxwell's demon, the reduction is paid for by the
+        Landauer cost of erasing the record~\cite{bennett}.
+\end{itemize}
+
+\subsection{Experimental proposals}
+
+\begin{enumerate}
+  \item \emph{Tomography.} Prepare an unknown state $\ket v$, measure in a tomographically complete
+        set of bases, reconstruct $\hat\rho$ by maximum likelihood, and report the fidelity
+        $F=\bra v\hat\rho\ket v$. Plotting $F$ against $N$ shows inductive refinement directly.
+  \item \emph{Quantum walk.} The state $\ket{v(\tau)}=\sum_n\alpha_n(\tau)\ket n\ket{c_n}$, with
+        position $\ket n$ and coin $\ket{c_n}$, displays iteration as coherent evolution.
+  \item \emph{Error correction.} A logical qubit $\ket{v_L}$ is a protected thought, the noisy
+        physical qubits are existence, the syndrome measurement is the study $s\exists$, and the
+        decoder's inferred error is the theory $t\varphi$; applying the correction is then a
+        deduction.
+\end{enumerate}
