@@ -1,21 +1,33 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
-# Catalog entry for this manuscript, in the same format as ../../../lean/formalization.yaml.
+# Project metadata in the formalization.yaml format (https://github.com/mathlib-initiative/formalization.yaml).
 version: "v0.4"
 
 project:
   name: "Deductive and inductive logic, formalized"
-  description: "Lean formalization of Wang (2025): Sections 3–6 in core Lean, and with Mathlib the Bayesian confirmation, defeasible inference and ordered-level extensions (Sections 5.3, 5.4, 6.1) and every proposition of the quantum information model (Section 7) of the revised draft."
+  description: "Lean formalization of every theorem of the paper: the possible-worlds semantics of deduction and induction (Sections 3–6, core Lean), and with Mathlib the Bayesian confirmation, defeasible inference and ordered-level extensions (Sections 5.3, 5.4, 6.1) and the quantum information model (Section 7)."
   authors: ["Hsuan Fu Wang"]
+  license: "Apache-2.0"
 
 sources:
   - title: "A Philosophical-Mathematical Representation of Deductive and Inductive Logic: A Diagrammatic and Formal Analysis"
     authors: ["Hsuan Fu Wang"]
     id: ../paper.pdf
-    # Revised preprint draft; the February 2025 version is ../original.pdf.
+    # Submitted version; the February 2025 manuscripts are in ../archive/.
     type: article
 
+classification:
+  arxiv: ["math.LO", "cs.LO", "quant-ph"]
+  msc2020: ["03A05", "03B48", "68T27", "68V20", "81P10"]
+
+automation:
+  methods:
+    - method: agent
+      framework: "Claude Code"
+      tool_setup: "Lean 4 toolchain v4.34.1 with Mathlib; lake build and #print axioms checks"
+      prompting_notes: "The author set the tasks section by section (formalize a stated result, report any statement changes); the agent wrote the Lean proofs and the corresponding LaTeX."
+
 status:
-  scope: "Partial progress."
+  scope: "Complete: every theorem, proposition and corollary of the paper is formalized."
   main_results:
     - comparator_config: ComparatorChallenges/InductionNotDeduction.json
       declaration: WangLogic.induction_not_deduction

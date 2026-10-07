@@ -1,0 +1,10 @@
+The text of the paper, its LaTeX source in paper/, and the PDF files in this repository
+(paper.pdf and archive/) are
+
+    Copyright (c) 2025-2026 Hsuan Fu Wang
+
+and licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0).
+To view a copy of this license, visit https://creativecommons.org/licenses/by/4.0/
+
+The Lean formalization in lean/ and the build scripts are licensed under the Apache License,
+Version 2.0; see LICENSE.

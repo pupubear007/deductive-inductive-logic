@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite the paper."
+title: "A Philosophical-Mathematical Representation of Deductive and Inductive Logic: A Diagrammatic and Formal Analysis"
+type: software
+authors:
+  - family-names: Wang
+    given-names: Hsuan Fu
+    email: hsuanfuwang@gmail.com
+    affiliation: Independent researcher
+repository-code: "https://github.com/pupubear007/pupubear007-deductive-inductive-logic"
+license: Apache-2.0
+keywords:
+  - deductive logic
+  - inductive logic
+  - Bayesian confirmation
+  - problem of induction
+  - quantum logic
+  - Lean 4
+  - Mathlib
+abstract: >-
+  Lean 4 formalization and LaTeX source of a paper giving a diagrammatic and
+  possible-worlds account of deductive and inductive reasoning, with Bayesian
+  confirmation, defeasible inference, ordered levels, and a quantum information
+  model. Every theorem of the paper is machine-checked.
+preferred-citation:
+  type: article
+  title: "A Philosophical-Mathematical Representation of Deductive and Inductive Logic: A Diagrammatic and Formal Analysis"
+  authors:
+    - family-names: Wang
+      given-names: Hsuan Fu
+      affiliation: Independent researcher
+  year: 2026
+  status: submitted

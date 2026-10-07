@@ -2,17 +2,16 @@
 
 | File | Use |
 |---|---|
-| [`wang-deductive-inductive-logic.pdf`](wang-deductive-inductive-logic.pdf) | Submission PDF (17 pages; identical to [`../paper.pdf`](../paper.pdf)) |
+| [`../paper.pdf`](../paper.pdf) | Submission PDF (17 pages). Rename it on upload if the venue asks, e.g. `wang-deductive-inductive-logic.pdf`. |
 | [`arxiv-source.tar.gz`](arxiv-source.tar.gz) | arXiv source: `paper.tex`, `preamble.tex`, `sections/`, and the pre-built `paper.bbl`. Compiles with `pdflatex` alone. |
 
-To rebuild both from [`../build`](../build):
+To rebuild both from [`../paper`](../paper):
 
 ```sh
-cd ../build
+cd paper
 pdflatex paper && bibtex paper && pdflatex paper && pdflatex paper
 tar czf ../submission/arxiv-source.tar.gz paper.tex preamble.tex paper.bbl sections
 cp paper.pdf ../paper.pdf
-cp paper.pdf ../submission/wang-deductive-inductive-logic.pdf
 ```
 
 ## arXiv metadata
@@ -24,9 +23,8 @@ cp paper.pdf ../submission/wang-deductive-inductive-logic.pdf
   quant-ph (Quantum Physics).
 - **MSC class:** 03A05, 03B48, 68T27, 68V20, 81P10
 - **Comments:** 17 pages, 1 figure, 2 tables. All results are formalized in Lean 4 with Mathlib;
-  the code is at https://github.com/pupubear007/math
-  (manuscripts/deductive-inductive-logic/lean).
-- **License:** your choice; CC BY 4.0 is the common choice for open access.
+  the code is at https://github.com/pupubear007/pupubear007-deductive-inductive-logic
+- **License:** CC BY 4.0, matching [`../LICENSE-paper`](../LICENSE-paper).
 
 **Abstract** (plain text for the submission form):
 
@@ -51,16 +49,18 @@ cp paper.pdf ../submission/wang-deductive-inductive-logic.pdf
 
 ## Before submitting
 
-- [ ] **Make the code reachable.** The paper's Code availability statement points to
-      `github.com/pupubear007/math`. Make the repository public (or the formalization directory
-      available in a public repository), and merge this branch or link to it. For a journal, also
-      archive a release on Zenodo and add its DOI to the statement.
-- [ ] **Check the AI-use statement** in "Statements and declarations" and adjust its wording to
-      your venue's policy.
+- [x] Code in a dedicated public repository, cited in the paper's Code availability statement.
+- [x] Licences: Apache-2.0 for the Lean code, CC BY 4.0 for the paper.
+- [x] CI builds the Lean project, checks axioms and `sorry`, and builds the PDF on every push.
+- [ ] **Archive a release on Zenodo.** Sign in at zenodo.org with GitHub, enable this repository
+      under *GitHub* settings, then create a GitHub release (e.g. tag `v1.0-submitted`). Zenodo
+      mints a DOI from `CITATION.cff`. Add the DOI to the Code availability statement in
+      `paper/sections/08-discussion.tex` and rebuild.
+- [ ] **Check the AI-use statement** in "Statements and declarations" against your venue's policy.
 - [ ] **Spot-check the references** (author spellings, editions, DOIs), especially the editions
       chosen for Aristotle, Descartes, Hume and Kant.
 - [ ] **arXiv endorsement.** First-time submitters to math.LO may need an endorsement from an
       established author in that category.
 - [ ] **Journal version.** The source uses the standard `article` class with numeric references.
-      For a journal, move the sections into its template; the `\lean{...}` margin names and the
+      For a journal, move the sections into its template; the `\lean{...}` names and the
       appendix table carry over unchanged.

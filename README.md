@@ -1,73 +1,92 @@
-# [A Philosophical-Mathematical Representation of Deductive and Inductive Logic: A Diagrammatic and Formal Analysis](paper.pdf)
+# A Philosophical-Mathematical Representation of Deductive and Inductive Logic: A Diagrammatic and Formal Analysis
 
-**Author:** Hsuan Fu Wang  
-**Date:** Submission version, October 2026 (revised from the [February 2025 version](original.pdf))  
-**Submission package:** [`submission/`](submission/) (PDF, arXiv source, metadata and checklist)
+[![CI](https://github.com/pupubear007/pupubear007-deductive-inductive-logic/actions/workflows/ci.yml/badge.svg)](https://github.com/pupubear007/pupubear007-deductive-inductive-logic/actions/workflows/ci.yml)
 
-Section 7 is an application to quantum information theory, adapted from the companion manuscript
-[*A Quantum Information Theoretic Model for the Philosophical-Mathematical Representation of
-Deductive and Inductive Logic*](original-quantum.pdf) (February 2025). All its propositions are
-formalized in Lean with Mathlib; see below.
+**Hsuan Fu Wang** (independent researcher) · [hsuanfuwang@gmail.com](mailto:hsuanfuwang@gmail.com)
 
-## Citation
+**Paper:** [`paper.pdf`](paper.pdf) (submission version, October 2026) ·
+**Lean formalization:** [`lean/`](lean/) · **Submission package:** [`submission/`](submission/)
 
-```bibtex
-@misc{Wang:Deductive-Inductive-Logic-2026,
-  author = {Hsuan Fu Wang},
-  title = {{A Philosophical-Mathematical Representation of Deductive and Inductive Logic:
-            A Diagrammatic and Formal Analysis}},
-  note = {Submitted},
-  year = {2026}
-}
-```
+> We give a diagrammatic representation of deductive and inductive reasoning in which deduction is
+> a certain passage from thought to existence, and induction is a tentative, iterated passage from
+> the study of existence to the theory of thought. We make the diagram precise in a
+> possible-worlds semantics: thoughts are propositions about worlds, deduction is semantic
+> entailment, polarity distinguishes affirmation from modus tollens, and an inductive theory is
+> supported by a study when some world is consistent with both. Within this setting we prove that
+> deduction is sound and transitive, that iterated observation can only narrow the supported
+> theories, that a single counterexample falsifies a universal theory, and that no finite study
+> entails a universal theory over an unobserved individual. The last statement is a formal
+> version of Hume's problem of induction. As an application we realize the framework in quantum
+> information theory: thoughts become subspaces, deduction becomes certain measurement and unitary
+> evolution, induction becomes state tomography, and the classical setting is recovered as the
+> case of commuting observables. The quantum model reproduces refinement, falsification and
+> underdetermination, and adds a limitation with no classical counterpart: measurements in a
+> single basis never determine a quantum state. We further give a Bayesian refinement of support,
+> under which every genuine test a theory predicts confirms it, a ranked semantics for defeasible
+> inference, and an order on levels under which iteration moves upward. Every theorem of the paper
+> is verified in the Lean 4 proof assistant with Mathlib.
 
-## Building the PDF
+## Repository layout
 
-The LaTeX source is in [`build/`](build/) and follows the layout of the preprints in
-[`../../preprints`](../../preprints).
+| Path | Contents |
+|---|---|
+| [`paper.pdf`](paper.pdf) | The paper |
+| [`paper/`](paper/) | LaTeX source |
+| [`lean/`](lean/) | Lean 4 formalization of every theorem (package `WangLogic`) |
+| [`submission/`](submission/) | arXiv source bundle, arXiv metadata, pre-submission checklist |
+| [`archive/`](archive/) | The February 2025 manuscripts this paper revises, and the list of changes |
+
+## Building
+
+**Lean** (needs [elan](https://github.com/leanprover/elan); the toolchain `v4.34.1` is installed
+automatically):
 
 ```sh
-cd build
+cd lean
+lake exe cache get     # download prebuilt Mathlib
+lake build
+lake env lean AxiomCheck.lean   # axioms used by every cited theorem
+```
+
+`Basic.lean` (Sections 3–6) uses only the Lean core library; the other files use Mathlib, pinned
+to commit `d13f23b723b8a846827a245b89c10fc7d3f11612`. No file contains `sorry`, and every theorem
+depends at most on the axioms `propext`, `Quot.sound` and `Classical.choice`. CI checks both on
+every push.
+
+**Paper** (needs a TeX Live installation with `latexmk`, or run the four commands):
+
+```sh
+cd paper
 pdflatex paper && bibtex paper && pdflatex paper && pdflatex paper
 ```
 
-## Lean formalization
+## Theorems and their Lean declarations
 
-[`lean/WangLogic/Basic.lean`](lean/WangLogic/Basic.lean) formalizes Sections 3–6 in plain Lean 4
-(toolchain `v4.34.1`, the same one as [`../../lean`](../../lean)), without Mathlib.
-The other files use Mathlib, pinned to commit `d13f23b723b8a846827a245b89c10fc7d3f11612` (the
-same pin as [`../../lean/lakefile.lean`](../../lean/lakefile.lean)):
+All declarations are in the namespace `WangLogic`. Appendix A of the paper has the same table.
 
-| File | Draft |
+| File | Paper |
 |---|---|
+| [`Basic.lean`](lean/WangLogic/Basic.lean) | Sections 3–6 |
 | [`Confirmation.lean`](lean/WangLogic/Confirmation.lean) | Remark 3.5; §5.3 Bayesian confirmation |
 | [`Defeasible.lean`](lean/WangLogic/Defeasible.lean) | §5.4 defeasible inference |
 | [`Levels.lean`](lean/WangLogic/Levels.lean) | §6.1 ordered levels |
 | [`Quantum.lean`](lean/WangLogic/Quantum.lean) | Props. 7.1, 7.3, 7.5 |
 | [`QuantumExtensions.lean`](lean/WangLogic/QuantumExtensions.lean) | Props. 7.2, 7.4, 7.6; entropy invariance |
 
-No file has a `sorry`, and every declaration uses at most the axioms `propext`, `Quot.sound` and
-`Classical.choice`.
-
-```sh
-cd lean
-lake exe cache get
-lake build
-```
-
-| 2025 version | Lean |
+| Paper, Sections 3–6 | Lean |
 |---|---|
-| §3.1 `Φ`, `∃` | `Thought W := W → Prop` over a type of possible worlds `W` |
-| §3.3 `ϕ → ∃` as `¬ϕ ∨ ∃` | `imp_iff_not_or` |
-| §3.3 `Φ_ϕ ⊆ f⁻¹(∃_∃)` | `Entails`, `deduction_sound`, `Entails.trans` |
-| §2.2 deductive swan example | `swan_syllogism` |
-| `↑`, `↓`; `ϕ → ∃↓` | `Polarity`, `Polarity.apply`, `modus_tollens` |
-| §3.4 `P(T_ϕ \| S_∃) > 0` | `Supported` (some world fits the study and the theory) |
-| §3.4 iterative refinement `i` | `Supported.of_cons`, `Supported.mono` |
-| §4 Popper's falsifiability | `falsification` |
-| §4 Hume's problem of induction | `induction_not_deduction` |
-| §2.2 inductive swan example | `allWhite_supported` |
-| §3.5 `m : I × H × L × {0,1} → Φ` | `m`, `m_spec` |
+| Def. 3.2, entailment `φ ⊨ ψ` | `Entails` |
+| Def. 3.4, support `s ⟳ t` | `Supported` |
+| Prop. 4.1, `(p → q) ⇔ (¬p ∨ q)` | `imp_iff_not_or` |
+| Thm. 4.2, deduction is certain | `deduction_sound` |
+| Prop. 4.3, chains of deduction | `Entails.trans` |
+| Prop. 4.4, negative polarity is modus tollens | `modus_tollens` |
+| Example 4.5, deductive swan | `swan_syllogism` |
+| Prop. 5.1, Thm. 5.2, refinement is monotone | `Supported.of_cons`, `Supported.mono` |
+| Prop. 5.3, falsification | `falsification` |
+| Thm. 5.4, induction is not deduction | `induction_not_deduction` |
+| Prop. 5.5, inductive swan | `allWhite_supported` |
+| Def. 6.1, Prop. 6.2, foundation map | `m`, `m_spec` |
 
 | Draft, Sections 3–6 extensions | Lean |
 |---|---|
@@ -102,45 +121,30 @@ Section 7 operators are complex matrices: a projector is a Hermitian idempotent 
 operator is positive semidefinite with trace 1, and `P ≤ Q` is written `Q * P = P`. In §5.3 the set
 of worlds is finite and a prior is a strictly positive weight. Not formalized: Landauer's
 principle (a physical law), `H(T | S) ≤ H(T)`, and the implementations and experimental proposals
-of Section 7. The Discussion lists what remains open for each limitation of the first draft, with
-proposed approaches.
+of Section 7. The Discussion of the paper lists the open problems, with proposed approaches.
 
 [`lean/ComparatorChallenges/InductionNotDeduction.json`](lean/ComparatorChallenges/InductionNotDeduction.json)
-states the headline theorem in the repository's
-[Comparator](../../lean/ComparatorChallenges/README.md) format, and
-[`lean/formalization.yaml`](lean/formalization.yaml) catalogues it in the format of
-[`../../lean/formalization.yaml`](../../lean/formalization.yaml).
+states Theorem 5.4 for independent checking with
+[Comparator](https://github.com/leanprover/comparator), and
+[`lean/formalization.yaml`](lean/formalization.yaml) describes the project in the
+[formalization.yaml](https://github.com/mathlib-initiative/formalization.yaml) format.
 
-## Revisions to the manuscript
+## Citation
 
-The draft in [`paper.pdf`](paper.pdf) makes each of these changes to the [2025 version](original.pdf).
-Each item is a place where the 2025 text could not be stated in Lean as written; the Lean file
-shows the replacement.
+```bibtex
+@unpublished{Wang2026DeductiveInductive,
+  author = {Hsuan Fu Wang},
+  title  = {A Philosophical-Mathematical Representation of Deductive and Inductive Logic:
+            A Diagrammatic and Formal Analysis},
+  note   = {Submitted. Lean formalization at
+            \url{https://github.com/pupubear007/pupubear007-deductive-inductive-logic}},
+  year   = {2026}
+}
+```
 
-1. **Rename the set of existences.** `∃` is used for the existential quantifier, the set of
-   outcomes, and an element of that set. Use `W` (possible worlds) for the set and `w` for an
-   element.
-2. **Make Axiom 1 a relation, not a function.** `f : Φ → ∃` must send each thought to exactly one
-   existence, but a thought entails many. Define entailment `ϕ ⊨ ψ` as
-   `{w | ϕ(w)} ⊆ {w | ψ(w)}` (`Entails`) and drop `f`.
-3. **Replace "Thus, `ϕ → ∃` is valid" with theorems that have content.** §3.3–3.5 assume their
-   conclusions in the axioms. State instead what the framework proves: soundness
-   (`deduction_sound`), modus tollens for `↓` (`modus_tollens`), falsification
-   (`falsification`), and that no finite study entails a universal theory
-   (`induction_not_deduction`). The last is the paper's strongest formal point and supports the
-   Hume discussion in §4.
-4. **Define the inductive criterion precisely.** `P(T_ϕ | S_∃) > 0` is undefined when
-   `P(S_∃) = 0` and is met by every theory consistent with the data. Present it as
-   "the theory is consistent with the study" (`Supported`) and state monotonicity under new
-   observations (`Supported.mono`) as the meaning of iteration `i`.
-5. **Define the inductive polarity.** "Ascending probability" for `tϕ↑` needs a definition. A
-   natural one is Bayesian confirmation, `P(t | s) > P(t)`. The draft now does this in §5.3
-   (`Confirms`), and proves that white sightings raise the probability of "all swans are white"
-   at every step (`allWhite_confirmed`, `allWhite_condProb_mono`).
-6. **Give observations a type.** `s∃ ∈ S × ∃` makes an observation a pair, and `⊨` between pairs
-   is undefined. Treat a study as a list of thoughts known to hold (`List (Thought W)`).
-7. **Fix the codomain of `m`.** `m(i, h, l, 1) = ϕ or ∃` mixes thoughts and existences. Let `m`
-   return a thought, with state `0` giving its negation; `m_spec` then proves the binary state is
-   the truth value.
-8. **Retitle §3** from "Mathematical Proof" to "Formalization" and cite the Lean file, or add a
-   short appendix listing the theorem names above.
+GitHub's "Cite this repository" button reads [`CITATION.cff`](CITATION.cff).
+
+## License
+
+The Lean code is licensed under the [Apache License 2.0](LICENSE). The paper text, its LaTeX
+source and the PDFs are licensed under [CC BY 4.0](LICENSE-paper).
