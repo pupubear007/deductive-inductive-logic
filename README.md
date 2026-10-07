@@ -1,6 +1,6 @@
 # A Philosophical-Mathematical Representation of Deductive and Inductive Logic: A Diagrammatic and Formal Analysis
 
-[![CI](https://github.com/pupubear007/pupubear007-deductive-inductive-logic/actions/workflows/ci.yml/badge.svg)](https://github.com/pupubear007/pupubear007-deductive-inductive-logic/actions/workflows/ci.yml)
+[![CI](https://github.com/pupubear007/deductive-inductive-logic/actions/workflows/ci.yml/badge.svg)](https://github.com/pupubear007/deductive-inductive-logic/actions/workflows/ci.yml)
 
 **Hsuan Fu Wang** (independent researcher) · [hsuanfuwang@gmail.com](mailto:hsuanfuwang@gmail.com)
 
@@ -137,7 +137,7 @@ states Theorem 5.4 for independent checking with
   title  = {A Philosophical-Mathematical Representation of Deductive and Inductive Logic:
             A Diagrammatic and Formal Analysis},
   note   = {Submitted. Lean formalization at
-            \url{https://github.com/pupubear007/pupubear007-deductive-inductive-logic}},
+            \url{https://github.com/pupubear007/deductive-inductive-logic}},
   year   = {2026}
 }
 ```

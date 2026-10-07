@@ -23,7 +23,7 @@ cp paper.pdf ../paper.pdf
   quant-ph (Quantum Physics).
 - **MSC class:** 03A05, 03B48, 68T27, 68V20, 81P10
 - **Comments:** 17 pages, 1 figure, 2 tables. All results are formalized in Lean 4 with Mathlib;
-  the code is at https://github.com/pupubear007/pupubear007-deductive-inductive-logic
+  the code is at https://github.com/pupubear007/deductive-inductive-logic
 - **License:** CC BY 4.0, matching [`../LICENSE-paper`](../LICENSE-paper).
 
 **Abstract** (plain text for the submission form):
