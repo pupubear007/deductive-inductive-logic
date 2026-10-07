@@ -22,23 +22,50 @@ These views connect to the idea that physical processes are computations~\cite{d
 logic; the foundation invites discussion of polarity and iteration. The visual layout follows
 the view that diagrams make inferential structure explicit~\cite{larkin,johnsonlaird}.
 
-\paragraph{Limitations and future work.}
+\paragraph{Limitations and future work.} Each limitation of the first draft is listed with what
+this version does about it; the items marked \emph{proved} are formalized in Lean.
 \begin{itemize}
-  \item Support (\cref{def:support}) is qualitative. A quantitative reading of the inductive
-        polarity $t\varphi^{\up}$ is Bayesian confirmation, $P(t\mid s)>P(t)$; formalizing it
-        requires a probability library such as Mathlib.
-  \item The indices $i,h,l$ of the foundation are uninterpreted sets. Giving levels an order
-        (for example observational below theoretical) would let one state that iteration moves
-        upward.
-  \item Only propositional and first-order statements over a fixed set of worlds are treated.
-        Multi-premise defeasible reasoning and higher-order logic are left open.
-  \item The quantum model is limited in practice by decoherence, state-preparation and
-        measurement errors, and scale~\cite{preskill,arute}. Error-corrected and topological
-        implementations, and hybrid quantum--classical reasoning, are natural next steps.
-  \item The formalization of \cref{sec:quantum} covers its three propositions only. The claims
-        about unitary evolution, the failure of distributivity, and von Neumann entropy are
-        not formalized.
-  \item The diagram's usefulness for learners is an empirical claim that remains to be tested.
+  \item \emph{Quantitative support (proved).} Support (\cref{def:support}) is qualitative.
+        \Cref{sec:confirmation} adds Bayesian confirmation $P(t\mid s)>P(t)$ over a finite set
+        of worlds and proves that it implies support, that a theory is confirmed by any genuine
+        test it predicts (\cref{thm:hd}), that iteration raises confirmation
+        (\cref{prop:ascend}) and that refutation sends it to $0$ (\cref{prop:qpopper}).
+        \Cref{rem:probability} is now proved as well. \emph{Open:} infinite or continuous
+        sets of worlds, where the same definitions can be stated with Mathlib's measures and
+        \texttt{ProbabilityTheory.cond}; and the size of the confirmation, which depends on the
+        prior even though its sign (\cref{cor:bswan}) does not.
+  \item \emph{Ordered levels (proved).} \Cref{sec:levels} orders the levels and proves that
+        iteration moves upward (\cref{thm:upward}). \emph{Proposal} for the other indices:
+        let a hypothesis $h$ index a partition of $\W$, the distinctions a study under $h$ can
+        draw; then a theory is identifiable under $h$ only if it is a union of cells.
+        \Cref{prop:qhume}(4) is the quantum instance, where the $z$ basis cannot resolve the phase.
+  \item \emph{Defeasible and higher-order reasoning.} Multi-premise defeasible inference is now
+        treated in \cref{sec:defeasible} (\emph{proved}). For higher-order logic, note that every
+        theorem above is proved for an arbitrary type of worlds, including function spaces: in
+        the swan examples a world is a predicate on birds, so $\All$ already quantifies over a
+        predicate. A higher-order \emph{logic}, with its own syntax and entailment, is still open;
+        the natural route is Henkin semantics~\cite{henkin}, with soundness proved against the
+        possible-worlds reading of \cref{sec:setting}.
+  \item \emph{Noise (proved in a model; engineering open).} The quantum model is limited in
+        practice by decoherence, state-preparation and measurement errors, and
+        scale~\cite{preskill,arute}. \Cref{prop:noise} quantifies the effect of depolarizing
+        noise on both arrows. \emph{Proposal:} formalize the three-qubit repetition code and show
+        that it restores certainty to order $\varepsilon^2$; error-corrected and topological
+        implementations, and hybrid quantum--classical reasoning, remain experimental steps.
+  \item \emph{Section~\ref{sec:quantum} (proved, except physics).} Unitary deduction
+        (\cref{prop:unitary}), non-distributivity (\cref{prop:nondistrib}) and invariance of von
+        Neumann entropy are now formalized. Landauer's principle is a physical law, not a
+        theorem of the model, and is assumed. The inequality $H(T\mid S)\le H(T)$ is a standard
+        consequence of the concavity of entropy; formalizing it for finite distributions is a
+        routine next step.
+  \item \emph{Learners (empirical; proposed design).} Whether the diagram helps learners cannot
+        be proved, only tested. We propose a preregistered randomized trial: students in an
+        introductory logic course are assigned to a lesson using the diagram or to the same
+        lesson in prose, then tested on classifying arguments as deductive or inductive, on
+        spotting fallacies (affirming the consequent, hasty generalization) and on predicting
+        the effect of a counterexample, with a retention test four weeks later. To detect a
+        medium effect ($d=0.5$) with power $0.8$ at $\alpha=0.05$ needs about $64$ students per
+        arm.
 \end{itemize}
 
 \section{Conclusion}

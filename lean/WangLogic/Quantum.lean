@@ -14,7 +14,7 @@ Companion to Section 7 of the preprint draft. Two models of the same quantum mec
   inner product space `E`, realized by its orthogonal projection `K.starProjection`. The paper's
   order `P ≤ Q` on projectors is inclusion of ranges, `K ≤ L`, equivalently `Q ∘ P = P`
   (`starProjection_comp_eq_iff`), and `I - P` is the projection onto `Kᗮ`.
-* **Matrices** (Propositions 7.2 and 7.3). Operators on `ℂ^W` are matrices `Matrix W W ℂ`, a
+* **Matrices** (Propositions 7.3 and 7.5). Operators on `ℂ^W` are matrices `Matrix W W ℂ`, a
   density operator is a positive semidefinite matrix of trace `1`, and the Born probability of
   outcome `P` in state `ρ` is `Tr(ρ P)`. For the classical case the order `P ≤ Q` is taken in its
   algebraic form `Q * P = P`.
@@ -136,7 +136,7 @@ def QSupported (ρ : Matrix n n ℂ) (outcomes : List (Matrix n n ℂ)) : Prop :
 
 end Born
 
-/-! ## Proposition 7.2: the classical framework is the commuting case -/
+/-! ## Proposition 7.3: the classical framework is the commuting case -/
 
 section Classical
 
@@ -181,7 +181,7 @@ theorem classicalProj_isProjector (φ : Thought W) : IsProjector (classicalProj 
   · rw [classicalProj_mul]
     simp
 
-/-- **Proposition 7.2 (1).** `P_φ ≤ P_ψ` (in the form `P_ψ P_φ = P_φ`) iff `φ ⊨ ψ`. -/
+/-- **Proposition 7.3 (1).** `P_φ ≤ P_ψ` (in the form `P_ψ P_φ = P_φ`) iff `φ ⊨ ψ`. -/
 theorem classicalProj_le_iff (φ ψ : Thought W) :
     classicalProj ψ * classicalProj φ = classicalProj φ ↔ Entails φ ψ := by
   classical
@@ -200,7 +200,7 @@ theorem classicalProj_le_iff (φ ψ : Thought W) :
     · simp [hφ]
 
 omit [Fintype W] in
-/-- **Proposition 7.2 (1), negation.** `P_{¬φ} = I - P_φ`. -/
+/-- **Proposition 7.3 (1), negation.** `P_{¬φ} = I - P_φ`. -/
 theorem classicalProj_not (φ : Thought W) :
     classicalProj (fun w => ¬φ w) = 1 - classicalProj φ := by
   classical
@@ -218,7 +218,7 @@ theorem classicalProj_prod (obs : List (Thought W)) :
     rw [List.map_cons, List.prod_cons, ih, classicalProj_mul]
     simp
 
-/-- **Proposition 7.2 (2).** For a diagonal density `ρ = ∑ pₙ |n⟩⟨n|` with every `pₙ > 0`,
+/-- **Proposition 7.3 (2).** For a diagonal density `ρ = ∑ pₙ |n⟩⟨n|` with every `pₙ > 0`,
 `Tr(ρ P_t P_{o₁} ⋯ P_{o_k}) > 0` iff the study `o₁, …, o_k` supports `t`. -/
 theorem classical_trace_pos_iff (p : W → ℝ) (hp : ∀ w, 0 < p w) (obs : List (Thought W))
     (t : Thought W) :
@@ -246,14 +246,14 @@ theorem classical_trace_pos_iff (p : W → ℝ) (hp : ∀ w, 0 < p w) (obs : Lis
 
 end Classical
 
-/-! ## Proposition 7.3: induction as state tomography -/
+/-! ## Proposition 7.5: induction as state tomography -/
 
 section Tomography
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
 omit [DecidableEq n] in
-/-- **Proposition 7.3 (1).** A further outcome can only shrink the set of supported states:
+/-- **Proposition 7.5 (1).** A further outcome can only shrink the set of supported states:
 `L_{N+1}(ρ) > 0` implies `L_N(ρ) > 0`. -/
 theorem QSupported.of_concat {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef)
     {outcomes : List (Matrix n n ℂ)} {P : Matrix n n ℂ} (hP : IsProjector P)
@@ -338,7 +338,7 @@ theorem spinUp_eq (ϕ : ℝ) : spinUp = spinState 0 ϕ := by
   funext k
   fin_cases k <;> simp [spinUp, spinState]
 
-/-- **Proposition 7.3 (2), likelihood.** After `N` outcomes `↑`, the state `|θ, ϕ⟩` has
+/-- **Proposition 7.5 (2), likelihood.** After `N` outcomes `↑`, the state `|θ, ϕ⟩` has
 likelihood `cos^{2N} θ`. -/
 theorem likelihood_spinState_up (θ ϕ : ℝ) (N : ℕ) :
     likelihood (pureState (spinState θ ϕ)) (List.replicate N (basisProj 0)) =
@@ -346,7 +346,7 @@ theorem likelihood_spinState_up (θ ϕ : ℝ) (N : ℕ) :
   rw [← List.map_replicate, likelihood_pureState, List.map_replicate, List.prod_replicate,
     normSq_spinState, ite_eq_left_of_eq_true _ _ (eq_true rfl), pow_mul]
 
-/-- **Proposition 7.3 (2), underdetermination.** Every `|θ, ϕ⟩` with `0 ≤ θ < π/2` is supported
+/-- **Proposition 7.5 (2), underdetermination.** Every `|θ, ϕ⟩` with `0 ≤ θ < π/2` is supported
 by any number of outcomes `↑`. -/
 theorem spinState_supported {θ : ℝ} (h₀ : 0 ≤ θ) (h₁ : θ < Real.pi / 2) (ϕ : ℝ) (N : ℕ) :
     QSupported (pureState (spinState θ ϕ)) (List.replicate N (basisProj 0)) := by
@@ -354,7 +354,7 @@ theorem spinState_supported {θ : ℝ} (h₀ : 0 ≤ θ) (h₁ : θ < Real.pi / 
   rw [likelihood_spinState_up]
   exact pow_pos (Real.cos_pos_of_mem_Ioo ⟨by linarith [Real.pi_pos], h₁⟩) _
 
-/-- **Proposition 7.3 (2), maximum likelihood.** `|↑⟩` maximizes the likelihood of `N` outcomes
+/-- **Proposition 7.5 (2), maximum likelihood.** `|↑⟩` maximizes the likelihood of `N` outcomes
 `↑` over all density operators. -/
 theorem spinUp_maxLikelihood (N : ℕ) :
     IsDensity (pureState spinUp) ∧
@@ -365,14 +365,14 @@ theorem spinUp_maxLikelihood (N : ℕ) :
   rw [spinUp_eq 0, likelihood_spinState_up, Real.cos_zero, one_pow]
   exact likelihood_le_one hρ fun P hP => (List.eq_of_mem_replicate hP) ▸ basisProj_isProjector 0
 
-/-- **Proposition 7.3 (3), falsification.** A single outcome `↓` refutes `|↑⟩`. -/
+/-- **Proposition 7.5 (3), falsification.** A single outcome `↓` refutes `|↑⟩`. -/
 theorem spinUp_refuted (outcomes : List (Fin 2)) (h : 1 ∈ outcomes) :
     likelihood (pureState spinUp) (outcomes.map basisProj) = 0 := by
   rw [likelihood_pureState]
   apply List.prod_eq_zero
   exact List.mem_map.2 ⟨1, h, by simp [spinUp]⟩
 
-/-- **Proposition 7.3 (4), the phase is invisible.** No record of outcomes in the `↑, ↓` basis
+/-- **Proposition 7.5 (4), the phase is invisible.** No record of outcomes in the `↑, ↓` basis
 distinguishes `|θ, ϕ⟩` from `|θ, ϕ'⟩`. -/
 theorem likelihood_spinState_phase (θ ϕ ϕ' : ℝ) (outcomes : List (Fin 2)) :
     likelihood (pureState (spinState θ ϕ)) (outcomes.map basisProj) =

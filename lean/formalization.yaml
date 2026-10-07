@@ -4,7 +4,7 @@ version: "v0.4"
 
 project:
   name: "Deductive and inductive logic, formalized"
-  description: "Lean formalization of Sections 3–6 of Wang (2025) and, with Mathlib, of Propositions 7.1–7.3 (the quantum information model) of the revised draft."
+  description: "Lean formalization of Wang (2025): Sections 3–6 in core Lean, and with Mathlib the Bayesian confirmation, defeasible inference and ordered-level extensions (Sections 5.3, 5.4, 6.1) and every proposition of the quantum information model (Section 7) of the revised draft."
   authors: ["Hsuan Fu Wang"]
 
 sources:
@@ -32,14 +32,40 @@ status:
       file: WangLogic/Quantum.lean
       axioms: [propext, Classical.choice, Quot.sound]
       sorry_count: 0
+    - declaration: WangLogic.confirms_of_entails
+      file: WangLogic/Confirmation.lean
+      axioms: [propext, Classical.choice, Quot.sound]
+      sorry_count: 0
+    - declaration: WangLogic.allWhite_confirmed
+      file: WangLogic/Confirmation.lean
+      axioms: [propext, Classical.choice, Quot.sound]
+      sorry_count: 0
+    - declaration: WangLogic.Normally.cautious_mono
+      file: WangLogic/Defeasible.lean
+      axioms: [propext, Classical.choice, Quot.sound]
+      sorry_count: 0
+    - declaration: WangLogic.Hierarchy.Established.mono
+      file: WangLogic/Levels.lean
+      axioms: [propext, Classical.choice, Quot.sound]
+      sorry_count: 0
+    - declaration: WangLogic.quantum_not_distributive
+      file: WangLogic/QuantumExtensions.lean
+      axioms: [propext, Classical.choice, Quot.sound]
+      sorry_count: 0
+    - declaration: WangLogic.vonNeumannEntropy_unitary_conj
+      file: WangLogic/QuantumExtensions.lean
+      axioms: [propext, Classical.choice, Quot.sound]
+      sorry_count: 0
 
 fidelity:
   divergences: >-
-    Section 7 uses two models. Proposition 7.1 uses Mathlib's orthogonal projections
+    Section 5.3 assumes a finite set of worlds and a prior with full support. Section 7 uses two
+    models. Proposition 7.1 uses Mathlib's orthogonal projections
     (Submodule.starProjection) on a finite-dimensional complex inner product space, with P ≤ Q
-    read as subspace inclusion. Propositions 7.2 and 7.3 use complex matrices: a projector is a
+    read as subspace inclusion, and Proposition 7.4 uses the lattice of subspaces of ℂ².
+    Propositions 7.2, 7.3, 7.5 and 7.6 use complex matrices: a projector is a
     Hermitian idempotent matrix, a density operator is positive semidefinite with trace 1, the
-    Born probability is Re Tr(ρP), and in 7.2 the order P ≤ Q is written Q * P = P. In 7.3(2),
+    Born probability is Re Tr(ρP), and in 7.3 the order P ≤ Q is written Q * P = P. In 7.5(2),
     "|↑⟩ is the maximum-likelihood state" is proved as: its likelihood is at least that of every
     density operator.
 

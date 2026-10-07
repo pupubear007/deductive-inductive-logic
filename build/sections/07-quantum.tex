@@ -4,9 +4,9 @@ This section gives a physical realization of the framework in quantum informatio
 become subspaces of a Hilbert space, deduction becomes certain measurement and unitary evolution,
 induction becomes quantum state tomography, and the binary and polarized foundation becomes qubits
 and spins. The classical setting of \cref{sec:setting} reappears as the special case in which all
-observables commute (\cref{prop:classical}). Propositions~\ref{prop:qsound}--\ref{prop:qhume}
-are formalized in Lean with Mathlib (\cref{app:formalization}); the surrounding discussion of
-unitary evolution, physical implementations and thermodynamics is not.
+observables commute (\cref{prop:classical}). All propositions of this section are formalized in
+Lean with Mathlib (\cref{app:formalization}); the physical implementations, Landauer's principle and
+the experimental proposals are not.
 
 Throughout, $\Hil$ is a finite-dimensional complex Hilbert space, a \emph{state} is a unit vector
 $\ket v\in\Hil$ or a density operator $\rho$, and a \emph{projector} is an operator $P$ with
@@ -58,9 +58,20 @@ $P_\varphi P_\psi=(P_\psi P_\varphi)^\dagger=P_\varphi$.
 \end{proof}
 
 \Cref{prop:qsound} is the quantum form of \cref{thm:sound} and \cref{prop:tollens}. Unitary
-evolution is deductive in the same sense: $\ket v\mapsto U\ket v$ is deterministic, and if
-$UP_\varphi U^\dagger\le P_\psi$ then every state with property $\varphi$ is carried to one with
-property $\psi$. A general measurement is not certain. For a projective measurement $\{P_n\}$ with
+evolution is deductive in the same sense: $\ket v\mapsto U\ket v$ is deterministic.
+
+\begin{proposition}[Unitary deduction]\label{prop:unitary}
+Let $U^\dagger U=I$. If $UP_\varphi U^\dagger\le P_\psi$ and $P_\varphi\ket v=\ket v$, then
+$P_\psi U\ket v=U\ket v$. Moreover $\Tr(U\rho U^\dagger\,UPU^\dagger)=\Tr(\rho P)$ for all $\rho,P$.
+\lean{unitary\_deduction, born\_unitary\_conj}
+\end{proposition}
+
+\begin{proof}
+$U\ket v=UP_\varphi\ket v=(UP_\varphi U^\dagger)U\ket v$, and $P_\psi(UP_\varphi U^\dagger)=UP_\varphi U^\dagger$.
+The second claim is cyclicity of the trace.
+\end{proof}
+
+A general measurement is not certain. For a projective measurement $\{P_n\}$ with
 $\sum_n P_n=I$ and $P_nP_m=\delta_{nm}P_n$, the Born rule gives
 \[
   \ket v\ \longmapsto\ \frac{P_n\ket v}{\lVert P_n\ket v\rVert}
@@ -100,7 +111,20 @@ projector onto $(\ket\up+\ket\down)/\sqrt2$,
   \qquad
   (P_{x+}\wedge P_{z+})\vee(P_{x+}\wedge P_{z-})=0,
 \]
-so the distributive law fails. This marks where the quantum model goes beyond
+so the distributive law fails.
+
+\begin{proposition}[Quantum logic is not distributive]\label{prop:nondistrib}
+In the lattice of subspaces of $\mathbb C^2$, with $Z_\pm$ spanned by $\ket\up,\ket\down$ and $X_+$
+by $\ket\up+\ket\down$: $X_+\wedge(Z_+\vee Z_-)=X_+\ne0$ while
+$(X_+\wedge Z_+)\vee(X_+\wedge Z_-)=0$.
+\lean{quantum\_not\_distributive}
+\end{proposition}
+
+\begin{proof}
+$Z_+\vee Z_-=\mathbb C^2$. A vector $c(1,1)=d(a,b)$ with $a\ne b$ forces $c=0$, so both meets are $0$.
+\end{proof}
+
+This marks where the quantum model goes beyond
 \cref{sec:deduction}: the identity of \cref{prop:imp} relies on a Boolean structure that
 incompatible observables lack.
 
@@ -190,13 +214,36 @@ Landauer's principle resetting that record for reuse dissipates at least $N k_B 
 heat~\cite{landauer,bennett}. The two arrows then differ thermodynamically:
 \begin{itemize}
   \item \emph{Deduction preserves entropy.} Unitary evolution leaves the von Neumann entropy
-        $S(\rho)=-\Tr\rho\ln\rho$ unchanged, $S(U\rho U^\dagger)=S(\rho)$; no information is gained
-        or lost.
+        $S(\rho)=-\Tr\rho\ln\rho=-\sum_k\lambda_k\ln\lambda_k$ unchanged, $S(U\rho U^\dagger)=S(\rho)$,
+        because $U\rho U^\dagger$ and $\rho$ have the same characteristic polynomial; no
+        information is gained or lost.
+        \lean{vonNeumannEntropy\_unitary\_conj}
   \item \emph{Induction lowers the observer's entropy, at a price.} Observation reduces the
         expected Shannon entropy of the observer's belief about the theory,
         $H(T\mid S)\le H(T)$. As with Maxwell's demon, the reduction is paid for by the
         Landauer cost of erasing the record~\cite{bennett}.
 \end{itemize}
+
+\subsection{Noise}\label{sec:noise}
+
+Real devices are noisy. A simple model is the depolarizing channel
+$\mathcal D_\varepsilon(\rho)=(1-\varepsilon)\rho+\varepsilon I/d$ on a $d$-dimensional system.
+
+\begin{proposition}[Deduction and falsification under noise]\label{prop:noise}
+Let $0\le\varepsilon$. If $\Tr(\rho P)=1$ for a projector $P$, then
+$\Tr(\mathcal D_\varepsilon(\rho)P)\ge1-\varepsilon$. For a spin and $\varepsilon>0$,
+$\Tr\bigl(\mathcal D_\varepsilon(\ket\up\!\bra\up)\,\ket\down\!\bra\down\bigr)=\varepsilon/2>0$.
+\lean{born\_depolarize\_ge, noisy\_spinUp\_not\_refuted}
+\end{proposition}
+
+\begin{proof}
+$\Tr(\mathcal D_\varepsilon(\rho)P)=(1-\varepsilon)\Tr(\rho P)+\varepsilon\Tr(P)/d$ and $\Tr P\ge0$. For
+the spin, $\Tr(\ket\up\!\bra\up\,\ket\down\!\bra\down)=0$ and $\Tr(\ket\down\!\bra\down)/2=1/2$.
+\end{proof}
+
+Noise thus weakens both arrows in a controlled way: deductive certainty degrades by at most the
+noise rate, and falsification (\cref{prop:qhume}(3)) becomes statistical, since a single outcome
+$\down$ no longer refutes $\ket\up$. Error correction is the means of restoring them.
 
 \subsection{Experimental proposals}
 

@@ -34,8 +34,10 @@ $o_k$:
 
 \begin{remark}\label{rem:probability}
 The 2025 version required $P(T_\varphi\mid S_\exists)>0$. That quantity is undefined when the
-study has probability zero. If $\W$ is countable and $P$ gives every world positive probability,
+study has probability zero. If $\W$ is finite and $P$ gives every world positive probability,
 then $P(t\wedge s)>0$ holds exactly when $s\circlearrowright t$, so \cref{def:support} is the
-qualitative content of the original condition and needs no choice of prior. This remark is not
-part of the Lean formalization.
+qualitative content of the original condition and needs no choice of prior. (The same holds for
+countable $\W$; the Lean proof treats the finite case.) A quantitative refinement is given in
+\cref{sec:confirmation}.
+\lean{Prior.prob\_and\_pos\_iff\_supported}
 \end{remark}
