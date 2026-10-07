@@ -4,8 +4,9 @@ This section gives a physical realization of the framework in quantum informatio
 become subspaces of a Hilbert space, deduction becomes certain measurement and unitary evolution,
 induction becomes quantum state tomography, and the binary and polarized foundation becomes qubits
 and spins. The classical setting of \cref{sec:setting} reappears as the special case in which all
-observables commute (\cref{prop:classical}). Unlike Sections~\ref{sec:deduction}--\ref{sec:foundation},
-the results of this section are not yet formalized in Lean.
+observables commute (\cref{prop:classical}). Propositions~\ref{prop:qsound}--\ref{prop:qhume}
+are formalized in Lean with Mathlib (\cref{app:formalization}); the surrounding discussion of
+unitary evolution, physical implementations and thermodynamics is not.
 
 Throughout, $\Hil$ is a finite-dimensional complex Hilbert space, a \emph{state} is a unit vector
 $\ket v\in\Hil$ or a density operator $\rho$, and a \emph{projector} is an operator $P$ with
@@ -46,6 +47,7 @@ orthogonal complement, $P^{\down}=I-P$.
 Let $P_\varphi\le P_\psi$ and let $\ket v$ be a state with $P_\varphi\ket v=\ket v$. Then measuring
 $\{P_\psi,\,I-P_\psi\}$ on $\ket v$ yields $P_\psi$ with probability
 $\bra v P_\psi\ket v=1$. Moreover $I-P_\psi\le I-P_\varphi$.
+\lean{quantum\_deduction\_sound}
 \end{proposition}
 
 \begin{proof}
@@ -73,9 +75,11 @@ Let $\{\ket n\}_{n\in\W}$ be an orthonormal basis indexed by the finite set of w
 $P_\varphi=\sum_{n:\,\varphi(n)}\ket n\!\bra n$. Then
 \begin{enumerate}
   \item $P_\varphi\le P_\psi$ if and only if $\varphi\models\psi$, and $P_{\neg\varphi}=I-P_\varphi$;
+        \lean{classicalProj\_le\_iff, classicalProj\_not}
   \item if $\rho=\sum_n p_n\ket n\!\bra n$ with every $p_n>0$, then for a study
         $s=(o_1,\dots,o_k)$ and theory $t$,
         $\Tr\bigl(\rho\,P_t P_{o_1}\cdots P_{o_k}\bigr)>0$ if and only if $s\circlearrowright t$.
+        \lean{classical\_trace\_pos\_iff}
 \end{enumerate}
 \end{proposition}
 
@@ -121,18 +125,23 @@ t\varphi$ with iteration $i$ indexing the rounds.
 \begin{enumerate}
   \item Each further outcome can only shrink the set of supported states:
         $L_{N+1}(\rho)>0$ implies $L_N(\rho)>0$.
+        \lean{QSupported.of\_concat}
   \item Suppose $N$ measurements of $\{\ket\up\!\bra\up,\ket\down\!\bra\down\}$ all give $\up$.
         Then $\ket\up$ is the maximum-likelihood state, yet every state
         $\ket{\theta,\phi}=\cos\theta\ket\up+e^{i\phi}\sin\theta\ket\down$ with $0\le\theta<\pi/2$
         is supported, with likelihood $\cos^{2N}\theta>0$.
+        \lean{spinUp\_maxLikelihood, spinState\_supported}
   \item A single outcome $\down$ refutes the theory $\ket\up$: its likelihood becomes $0$.
+        \lean{spinUp\_refuted}
   \item No number of measurements in this basis distinguishes $\ket{\theta,\phi}$ from
         $\ket{\theta,\phi'}$: their outcome statistics are equal for all $\phi,\phi'$.
+        \lean{likelihood\_spinState\_phase}
 \end{enumerate}
 \end{proposition}
 
 \begin{proof}
-(1) $L_{N+1}(\rho)=L_N(\rho)\Tr(\rho P_{n_{N+1}})$ and the second factor is at most $1$.
+(1) $L_{N+1}(\rho)=L_N(\rho)\Tr(\rho P_{n_{N+1}})$, and every factor $\Tr(\rho P)$ lies in
+$[0,1]$, so $0\le L_{N+1}(\rho)\le L_N(\rho)$.
 (2) $\bra{\theta,\phi}\,\up\rangle\langle\up\,\ket{\theta,\phi}=\cos^2\theta$, so the likelihood is
 $\cos^{2N}\theta$, which is positive for $\theta<\pi/2$ and largest at $\theta=0$.
 (3) $\bra\up\,\down\rangle\langle\down\,\ket\up=0$.

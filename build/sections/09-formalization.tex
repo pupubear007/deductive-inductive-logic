@@ -2,13 +2,28 @@
 
 All results in Sections~\ref{sec:deduction}--\ref{sec:foundation} are formalized in Lean~4
 (toolchain \texttt{v4.34.1}) in the file \path{lean/WangLogic/Basic.lean} accompanying this
-paper. The formalization uses only the core library, contains no \texttt{sorry}, and depends at
-most on the axioms \texttt{propext}, \texttt{Quot.sound} and \texttt{Classical.choice}. It builds
-with
-\begin{center}\texttt{cd lean \&\& lake build}\end{center}
+paper, using only the core library. \Cref{prop:qsound,prop:classical,prop:qhume} are formalized in
+\path{lean/WangLogic/Quantum.lean} with Mathlib~\cite{mathlib} (commit
+\texttt{d13f23b7}). Neither file contains \texttt{sorry}, and every declaration depends at most
+on the axioms \texttt{propext}, \texttt{Quot.sound} and \texttt{Classical.choice}. The project
+builds with
+\begin{center}\texttt{cd lean \&\& lake exe cache get \&\& lake build}\end{center}
 The file \path{lean/ComparatorChallenges/InductionNotDeduction.json} states
 \cref{thm:hume} for independent checking with the Comparator tool. \Cref{rem:probability} and the
-results of \cref{sec:quantum} are not formalized.
+informal claims of \cref{sec:quantum} (unitary evolution, the failure of distributivity, entropy,
+implementations) are not formalized.
+
+\paragraph{Conventions for \cref{sec:quantum}.} In \cref{prop:qsound} a projector is the
+orthogonal projection \texttt{K.starProjection} onto a subspace $K$ of a finite-dimensional complex
+inner product space, and $P\le Q$ is inclusion of subspaces; \texttt{starProjection\_comp\_eq\_iff}
+proves that this agrees with $QP=P$, and \texttt{starProjection\_orthogonal\_eq\_sub} that
+$I-P$ projects onto $K^\perp$. In \cref{prop:classical,prop:qhume} operators are complex matrices,
+a projector is a Hermitian idempotent matrix, a density operator is a positive semidefinite matrix of
+trace $1$, and the Born probability is $\operatorname{Re}\Tr(\rho P)$. In \cref{prop:classical}
+the order $P\le Q$ is used in its algebraic form $QP=P$, and in \cref{prop:qhume} $\ket\up$ and
+$\ket\down$ are the standard basis vectors of $\mathbb C^2$. In part~(2) of \cref{prop:qhume},
+``$\ket\up$ is the maximum-likelihood state'' is proved in the form: the likelihood of $\ket\up$
+is at least that of every density operator.
 
 \begin{center}
 \begin{tabular}{@{}ll@{}}
@@ -26,6 +41,14 @@ Result & Lean declaration (namespace \texttt{WangLogic}) \\
 \Cref{thm:hume} & \texttt{induction\_not\_deduction} \\
 \Cref{prop:supported} & \texttt{allWhite\_supported} \\
 \Cref{prop:m} & \texttt{m\_spec} \\
+\midrule
+\Cref{prop:qsound} & \texttt{quantum\_deduction\_sound} \\
+\Cref{prop:classical}(1) & \texttt{classicalProj\_le\_iff}, \texttt{classicalProj\_not} \\
+\Cref{prop:classical}(2) & \texttt{classical\_trace\_pos\_iff} \\
+\Cref{prop:qhume}(1) & \texttt{QSupported.of\_concat}, \texttt{likelihood\_concat\_le} \\
+\Cref{prop:qhume}(2) & \texttt{spinState\_supported}, \texttt{spinUp\_maxLikelihood} \\
+\Cref{prop:qhume}(3) & \texttt{spinUp\_refuted} \\
+\Cref{prop:qhume}(4) & \texttt{likelihood\_spinState\_phase} \\
 \bottomrule
 \end{tabular}
 \end{center}

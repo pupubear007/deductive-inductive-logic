@@ -4,7 +4,7 @@ version: "v0.4"
 
 project:
   name: "Deductive and inductive logic, formalized"
-  description: "Lean formalization of Section 3 of Wang (2025)."
+  description: "Lean formalization of Sections 3–6 of Wang (2025) and, with Mathlib, of Propositions 7.1–7.3 (the quantum information model) of the revised draft."
   authors: ["Hsuan Fu Wang"]
 
 sources:
@@ -20,6 +20,28 @@ status:
     - comparator_config: ComparatorChallenges/InductionNotDeduction.json
       declaration: WangLogic.induction_not_deduction
       file: WangLogic/Basic.lean
+    - declaration: WangLogic.quantum_deduction_sound
+      file: WangLogic/Quantum.lean
+      axioms: [propext, Classical.choice, Quot.sound]
+      sorry_count: 0
+    - declaration: WangLogic.classical_trace_pos_iff
+      file: WangLogic/Quantum.lean
+      axioms: [propext, Classical.choice, Quot.sound]
+      sorry_count: 0
+    - declaration: WangLogic.likelihood_spinState_phase
+      file: WangLogic/Quantum.lean
+      axioms: [propext, Classical.choice, Quot.sound]
+      sorry_count: 0
+
+fidelity:
+  divergences: >-
+    Section 7 uses two models. Proposition 7.1 uses Mathlib's orthogonal projections
+    (Submodule.starProjection) on a finite-dimensional complex inner product space, with P ≤ Q
+    read as subspace inclusion. Propositions 7.2 and 7.3 use complex matrices: a projector is a
+    Hermitian idempotent matrix, a density operator is positive semidefinite with trace 1, the
+    Born probability is Re Tr(ρP), and in 7.2 the order P ≤ Q is written Q * P = P. In 7.3(2),
+    "|↑⟩ is the maximum-likelihood state" is proved as: its likelihood is at least that of every
+    density operator.
 
 review:
   status: unchecked

@@ -5,7 +5,8 @@
 
 Section 7 is an application to quantum information theory, adapted from the companion manuscript
 [*A Quantum Information Theoretic Model for the Philosophical-Mathematical Representation of
-Deductive and Inductive Logic*](original-quantum.pdf) (February 2025). It is not formalized in Lean.
+Deductive and Inductive Logic*](original-quantum.pdf) (February 2025). Its three propositions are
+formalized in Lean with Mathlib; see below.
 
 ## Citation
 
@@ -31,12 +32,16 @@ pdflatex paper && bibtex paper && pdflatex paper && pdflatex paper
 
 ## Lean formalization
 
-[`lean/WangLogic/Basic.lean`](lean/WangLogic/Basic.lean) formalizes Section 3 in plain Lean 4
-(toolchain `v4.34.1`, the same one as [`../../lean`](../../lean)). It needs no Mathlib, has no
-`sorry`, and uses only the axioms `propext`, `Quot.sound` and `Classical.choice`.
+[`lean/WangLogic/Basic.lean`](lean/WangLogic/Basic.lean) formalizes Sections 3–6 in plain Lean 4
+(toolchain `v4.34.1`, the same one as [`../../lean`](../../lean)), without Mathlib.
+[`lean/WangLogic/Quantum.lean`](lean/WangLogic/Quantum.lean) formalizes Propositions 7.1–7.3 with
+Mathlib, pinned to commit `d13f23b723b8a846827a245b89c10fc7d3f11612` (the same pin as
+[`../../lean/lakefile.lean`](../../lean/lakefile.lean)). Neither file has a `sorry`, and every
+declaration uses at most the axioms `propext`, `Quot.sound` and `Classical.choice`.
 
 ```sh
 cd lean
+lake exe cache get
 lake build
 ```
 
@@ -53,6 +58,23 @@ lake build
 | §4 Hume's problem of induction | `induction_not_deduction` |
 | §2.2 inductive swan example | `allWhite_supported` |
 | §3.5 `m : I × H × L × {0,1} → Φ` | `m`, `m_spec` |
+
+| Draft, Section 7 | Lean (`WangLogic/Quantum.lean`) |
+|---|---|
+| Prop. 7.1, quantum deductive certainty | `quantum_deduction_sound` (with `starProjection_comp_eq_iff`, `starProjection_orthogonal_eq_sub`) |
+| Prop. 7.2(1), `P_φ ≤ P_ψ ⇔ φ ⊨ ψ`, `P_¬φ = I − P_φ` | `classicalProj_le_iff`, `classicalProj_not`, `classicalProj_eq_sum` |
+| Prop. 7.2(2), `Tr(ρ P_t P_o₁ ⋯ P_oₖ) > 0 ⇔ s ⟳ t` | `classical_trace_pos_iff` |
+| Prop. 7.3(1), refinement | `QSupported.of_concat`, `likelihood_concat_le` |
+| Prop. 7.3(2), underdetermination and maximum likelihood | `spinState_supported`, `spinUp_maxLikelihood`, `likelihood_spinState_up` |
+| Prop. 7.3(3), falsification | `spinUp_refuted` |
+| Prop. 7.3(4), the phase is invisible | `likelihood_spinState_phase` |
+
+In Prop. 7.1 a projector is Mathlib's orthogonal projection `K.starProjection` onto a subspace of a
+finite-dimensional complex inner product space, and `P ≤ Q` is subspace inclusion. In Props. 7.2
+and 7.3 operators are complex matrices: a projector is a Hermitian idempotent matrix, a density
+operator is positive semidefinite with trace 1, and `P ≤ Q` is written `Q * P = P`. The informal
+parts of Section 7 (unitary evolution, failure of distributivity, entropy, implementations) are not
+formalized.
 
 [`lean/ComparatorChallenges/InductionNotDeduction.json`](lean/ComparatorChallenges/InductionNotDeduction.json)
 states the headline theorem in the repository's
