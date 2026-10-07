@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+# Catalog entry for this manuscript, in the same format as ../../../lean/formalization.yaml.
+version: "v0.4"
+
+project:
+  name: "Deductive and inductive logic, formalized"
+  description: "Lean formalization of Section 3 of Wang (2025)."
+  authors: ["Hsuan Fu Wang"]
+
+sources:
+  - title: "A Philosophical-Mathematical Representation of Deductive and Inductive Logic: A Diagrammatic and Formal Analysis"
+    authors: ["Hsuan Fu Wang"]
+    id: ../paper.pdf
+    type: article
+
+status:
+  scope: "Partial progress."
+  main_results:
+    - comparator_config: ComparatorChallenges/InductionNotDeduction.json
+      declaration: WangLogic.induction_not_deduction
+      file: WangLogic/Basic.lean
+
+review:
+  status: unchecked

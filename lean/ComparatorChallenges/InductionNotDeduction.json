@@ -1,0 +1,20 @@
+{
+  "challenge_module": "ComparatorChallenges.InductionNotDeduction",
+  "solution_module": "WangLogic.Basic",
+  "theorem_names": [
+    "WangLogic.induction_not_deduction"
+  ],
+  "definition_names": [
+    "WangLogic.Thought",
+    "WangLogic.Entails",
+    "WangLogic.Coloring",
+    "WangLogic.SeenWhite",
+    "WangLogic.AllWhite"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": false
+}
