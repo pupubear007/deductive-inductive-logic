@@ -38,6 +38,7 @@
 | [`paper/`](paper/) | LaTeX source |
 | [`lean/`](lean/) | Lean 4 formalization of every theorem (package `WangLogic`) |
 | [`submission/`](submission/) | arXiv source bundle, arXiv metadata, pre-submission checklist |
+| [`aggr_model/`](aggr_model/) | Aggressiveness determinants of *S. sclerotiorum* from dual RNA-seq and growth-chamber assays: isolate-wise sparse models, fixed-program vs host-responsive test, assay resolution (Thm 8.2) (branch `ss-aggressiveness-determinants`, work in progress) |
 | [`archive/`](archive/) | Earlier versions: the February 2025 manuscripts with the list of changes, and version 1 of this paper without the plant-pathology application |
 
 ## Building

@@ -1,0 +1,37 @@
+# Your data on your Mac (RNAseq_paper folder). Paths are absolute so this file works from anywhere;
+# edit them if you move the folder. Nothing under these paths is copied into git.
+out_dir: /Users/andrew20445/RNAseq_paper/aggr_model_runs/first_pass
+counts:
+  Gm: /Users/andrew20445/RNAseq_paper/Sclerotinia_dualRNAseq/data/counts/gene_counts_soybean_SALMON_PATHOGEN_only.txt
+  Ha: /Users/andrew20445/RNAseq_paper/Sclerotinia_dualRNAseq/data/counts/gene_counts_sunflower_SALMON_PATHOGEN_only.txt
+# host library totals (column sums of the *_SALMON_HOST_only.txt matrices) for pathogen transcript share
+library_totals: /Users/andrew20445/RNAseq_paper/Claude outputs/host_library_totals_for_aggr_model.csv
+# isolate x crop mean sAUDPC (CH4 Table 2). CHECK: these crops were phenotyped on Dwight/52-82B (soy)
+# and HA89/HA441 (sunflower); the RNA-seq hosts are Williams 82 and HA89.
+phenotype_table: /Users/andrew20445/RNAseq_paper/CH4_figures_tables/Table2_sAUDPC_and_ranks.csv
+host_to_crop: {Gm: Soybean, Ha: Sunflower}
+lesion_files:
+  Soybean: /Users/andrew20445/RNAseq_paper/CH4_figures_tables/IA_progress_final/IA_all_R1_R10_soybean_20240418_reorganized.csv
+  Dry bean: /Users/andrew20445/RNAseq_paper/CH4_figures_tables/IA_progress_final/IA_all_R1_R5_Drybean_20240418_reorganized.csv
+  Sunflower: /Users/andrew20445/RNAseq_paper/CH4_figures_tables/IA_progress_final/IA_all_R1_R4_sunflower_20240418_reorganized.csv
+  Canola: /Users/andrew20445/RNAseq_paper/CH4_figures_tables/IA_progress_final/IA_all_R1_R5_canola_20241202_reorganized.csv
+in_vitro:
+  oxalic_acid_per_mg:
+    file: /Users/andrew20445/RNAseq_paper/CH4_figures_tables/OA_quantification_results_20261005.csv
+    isolate_col: ID
+    value_col: mean_mM_per_mg
+  appressoria_per_field_96h:
+    file: /Users/andrew20445/RNAseq_paper/CH4_figures_tables/appressorium_per_field_72.csv
+    isolate_col: isolate
+    value_col: per_field
+    filter: {hpi: 96}
+  radial_growth_sAUGC:
+    file: /Users/andrew20445/RNAseq_paper/CH4_figures_tables/STAUDGC_per_plate.csv
+    isolate_col: isolate
+    value_col: STAUDGC
+annotation: /Users/andrew20445/RNAseq_paper/_backup_original/CH3_paper/Q6/Ss_counts_secretome_annotation.tsv
+isolate_aliases: {Ss1980: "1980", SsPotter: SSPotter, SSpotter: SSPotter}
+classes: {WISS47: low, JS659: low, MNSS6: high, Xtra7: high, SSPotter: soy_adapted, BN172: sun_adapted}
+timepoints: ["48"]          # proposal: 48 hpi; try ["24"], ["96"] or ["24","48","96"] as sensitivity checks
+n_permutations: 200
+n_bootstrap: 60
