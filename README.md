@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/pupubear007/deductive-inductive-logic/actions/workflows/ci.yml/badge.svg)](https://github.com/pupubear007/deductive-inductive-logic/actions/workflows/ci.yml)
 
-**Hsuan Fu Wang**, PhD candidate, Department of Plant Pathology, University of Minnesota ·
+**Hsuan Fu Wang**, Department of Plant Pathology, University of Minnesota ·
 [wan00965@umn.edu](mailto:wan00965@umn.edu)
 
 **Paper:** [`paper.pdf`](paper.pdf) (submission version, October 2026) ·
