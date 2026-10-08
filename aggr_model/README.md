@@ -54,6 +54,9 @@ python -m ssaggr.run --config data/syn/config.yaml --quick
 python -m ssaggr.run --config configs/real_local.yaml --quick    # first look, ~10 min
 python -m ssaggr.run --config configs/real_local.yaml            # 24, 48, 96 hpi and pooled; ~1 h with 200 permutations
 
+# figures (PNG 300 dpi + PDF) into <out_dir>/figures/
+python -m ssaggr.plots --run <out_dir>
+
 # design: isolates needed to separate fixed vs host-responsive
 python -m ssaggr.power --isolates 6 12 24 --seeds 5
 ```

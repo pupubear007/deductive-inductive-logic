@@ -99,3 +99,15 @@ def test_run_end_to_end(tmp_path):
     out = run(cfg)
     rep = (out / "report.md").read_text()
     assert "Leave-one-isolate-out prediction" in rep and (out / "tp_48" / "determinants.csv").exists()
+
+
+def test_plots_from_run(tmp_path):
+    from ssaggr.plots import make_all
+    from ssaggr.run import run
+    d = write(tmp_path / "d", n_iso=6, n_genes=300, regime="responsive", seed=1)
+    cfg = load_config(Path(d) / "config.yaml")
+    cfg["model"]["lambdas"] = [0.5, 0.2]
+    cfg["n_permutations"] = 3
+    cfg["n_bootstrap"] = 6
+    out = make_all(run(cfg))
+    assert (out / "fig2_heldout_r2.png").exists() and (out / "fig5_determinants.pdf").exists()
