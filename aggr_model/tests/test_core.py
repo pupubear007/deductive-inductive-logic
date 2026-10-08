@@ -98,4 +98,4 @@ def test_run_end_to_end(tmp_path):
     cfg["n_bootstrap"] = 6
     out = run(cfg)
     rep = (out / "report.md").read_text()
-    assert "Held-out isolate prediction" in rep and (out / "determinants.csv").exists()
+    assert "Leave-one-isolate-out prediction" in rep and (out / "tp_48" / "determinants.csv").exists()

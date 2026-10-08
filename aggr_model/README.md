@@ -51,22 +51,39 @@ python -m ssaggr.synthetic --out data/syn --regime responsive --isolates 12
 python -m ssaggr.run --config data/syn/config.yaml --quick
 
 # your data (paths in the config point at your RNAseq_paper folder)
-python -m ssaggr.run --config configs/real_local.yaml            # ~30 min with 200 permutations
-python -m ssaggr.run --config configs/real_local.yaml --quick    # first look, ~5 min
+python -m ssaggr.run --config configs/real_local.yaml --quick    # first look, ~10 min
+python -m ssaggr.run --config configs/real_local.yaml            # 24, 48, 96 hpi and pooled; ~1 h with 200 permutations
 
 # design: isolates needed to separate fixed vs host-responsive
 python -m ssaggr.power --isolates 6 12 24 --seeds 5
 ```
 
-Outputs go to `out_dir`: `report.md`, `stability.csv`, `responsiveness.csv`, `loio_*.csv`,
-`permutation_single.csv`, `cross_host.csv`, `determinants.csv`, `resolution.csv`.
+Outputs go to `out_dir`: `report.md` (with a summary table across time points),
+`summary_by_timepoint.csv` and `stability.csv`, plus one folder per time-point set (`tp_24`,
+`tp_48`, `tp_96`, `tp_24_48_96`) holding `responsiveness.csv`, `loio_single.csv`,
+`permutation_single.csv`, `joint_fixed_vs_responsive.csv`, `cross_host.csv`, `determinants.csv`
+and `resolution.csv`.
+
+## Scales
+
+- **Expression target:** sAUDPC standardized within host (z-score), as in the proposal
+  (`target_scale: z`). `raw`, `rank` and `log` are options.
+- **Stability regression:** sAUDPC as measured (`stability_scale: raw`, Eberhart–Russell). A
+  within-host z-score cannot be used here, because it sets every host mean, and so the host
+  index, to zero. `log` is an option.
+
+## Time points
+
+Each time point (24, 48, 96 hpi) is analysed on its own, then all three are pooled (intercepts
+per host × time point, shared gene weights). The per-time-point runs show *when* a signal
+appears. The pooled run uses all libraries.
 
 ## Before trusting a result
 
-1. **Phenotype and RNA-seq hosts must match.** CH4 Table 2 soybean values come from
-   Dwight / 52-82B; the RNA-seq host is Williams 82. Point `phenotype_table` at the matching
-   phenotype if one exists.
-2. **Decide the stability cut-offs** (`stability.classify`) before looking at expression results.
+1. **Phenotype source.** The default is the final Table S1 (`outputs_fig2/TableS1_long.csv`).
+   Its soybean column is the same dataset as the CH3 Fig. 1 sAUDPC.
+2. **Your hypothesis goes in the config** (`hypothesis_classes` or `stability_cutoffs`) before
+   looking at expression results. The code never invents class cut-offs.
 3. **Host and batch are confounded.** Soybean and sunflower were sequenced and quantified
    separately, so R²_host and cross-host transfer include batch. A shared control library across
    runs (proposal 5.4) is what fixes this.

@@ -18,13 +18,13 @@ versus host-responsive regulation.
 
 **Run on my data**
 3. Check that every path in `configs/real_local.yaml` exists. **Ask me** before changing any of
-   them. In particular, ask which phenotype table matches the sequenced host genotypes (the RNA-seq
-   soybean is Williams 82; CH4 Table 2 soybean is Dwight / 52-82B).
-4. `python -m ssaggr.run --config configs/real_local.yaml`. Then repeat with `timepoints: ["24"]`
-   and `["96"]` as sensitivity checks, writing to separate `out_dir`s.
-5. Summarise for me in a short table: LOIO R² and permutation p per host, fixed versus responsive,
-   cross-host transfer, the number of determinants per class, and which assays resolve the class
-   (with `p_chance`). State plainly what is not significant.
+   them. Ask me for my hypothesis classes (or cut-offs) and put them in `hypothesis_classes` /
+   `stability_cutoffs` before running.
+4. `python -m ssaggr.run --config configs/real_local.yaml` (runs 24, 48 and 96 hpi separately,
+   then pooled).
+5. Summarise `summary_by_timepoint.csv` for me: LOIO R² and permutation p per host and time
+   point, fixed versus responsive, cross-host transfer, the number of determinants per class, and
+   which assays resolve the class (with `p_chance`). State plainly what is not significant.
 6. Cross-check the top determinants against my CH3 candidate tables (Table 5 hubs, Table 6
    effectors / CAZymes, Table S1.1) in `/Users/andrew20445/RNAseq_paper`. List overlaps; do not
    edit those files.

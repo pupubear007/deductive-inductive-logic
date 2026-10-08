@@ -14,7 +14,8 @@ DEFAULTS: dict[str, Any] = {
     # --- inputs ---------------------------------------------------------------------------
     "counts": {},            # host code -> pathogen-only count matrix (genes x samples, TSV)
     "library_totals": None,  # CSV host,sample,host_total_counts (for pathogen transcript share)
-    "phenotype_table": None,  # isolate x crop table of mean sAUDPC (e.g. CH4 Table2)
+    "phenotype_table": None,  # mean sAUDPC: long (crop, isolate, mean) like CH4 TableS1_long.csv, or isolate x crop wide
+    "per_plant_saudpc": None,  # per-plant sAUDPC (crop, isolate, sAUDPC), e.g. CH4 sAUDPC_per_plant.csv
     "host_to_crop": {"Gm": "Soybean", "Ha": "Sunflower"},  # count-matrix host -> phenotype column
     "lesion_files": {},      # crop -> per-plant lesion time course CSV (optional, for ANOVA)
     "in_vitro": {},          # trait name -> {file, isolate_col, value_col, filter (optional)}
@@ -27,14 +28,23 @@ DEFAULTS: dict[str, Any] = {
     },
     "rep_remap": {"4": "1", "5": "2", "6": "3"},
     # --- preprocessing ----------------------------------------------------------------------
-    "timepoints": ["48"],    # hpi used for modelling (proposal: 48 hpi); list several to pool
+    "timepoints": ["24", "48", "96"],  # hpi in the panel
+    # every set is analysed separately; a set with several time points is pooled (time-specific
+    # intercepts, shared gene weights). Default: each time point alone, then all three pooled.
+    "timepoint_sets": [["24"], ["48"], ["96"], ["24", "48", "96"]],
+    "n_jobs": 2,             # parallel processes for the permutation null
     "min_count": 10,         # keep genes with >= min_count in >= min_samples libraries (CH4)
     "min_samples": 3,
     "top_variable_genes": 2000,  # unsupervised filter, recomputed inside every CV fold
     "colonization_covariate": True,  # include logit(pathogen transcript share) as a covariate
     "thin_to_equal_depth": False,    # binomial thinning of pathogen reads (proposal 5.6)
     # --- phenotype ----------------------------------------------------------------------------
-    "target_scale": "log",   # log: log(sAUDPC) centred within host; rank: within-host rank
+    "target_scale": "z",     # z: sAUDPC standardised within host (proposal); raw: centred sAUDPC; rank; log
+    "stability_scale": "raw",  # raw sAUDPC (Eberhart-Russell) or log (Finlay-Wilkinson's log scale)
+    # Your hypothesis, stated before the expression analysis: either explicit classes ...
+    "hypothesis_classes": {},  # e.g. {MNSS6: consistent, Xtra7: consistent, SSPotter: host_variable, ...}
+    # ... or cut-offs on the stability statistics (any subset); isolates are then classified by them
+    "stability_cutoffs": {},   # e.g. {mean_rank_min_high: 9, rank_range_max_consistent: 5}
     # --- model ----------------------------------------------------------------------------------
     "model": {
         "lambdas": [1.0, 0.5, 0.25, 0.1, 0.05, 0.025],  # L1 path (relative to lambda_max)

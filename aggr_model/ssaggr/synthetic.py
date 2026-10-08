@@ -86,6 +86,7 @@ def write(out: str | Path, **kw) -> Path:
         "host_to_crop": {h: crop.get(h, h) for h in hosts},
         "classes": {},
         "timepoints": list(kw.get("hpi", ("48",))),
+        "timepoint_sets": [list(kw.get("hpi", ("48",)))],
     }
     import yaml
     (out / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))

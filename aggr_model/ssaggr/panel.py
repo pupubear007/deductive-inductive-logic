@@ -40,17 +40,27 @@ def make_target(pheno: pd.DataFrame, isolates: list[str], hosts: list[str], host
         if crop not in pheno.columns:
             raise KeyError(f"host {h!r} maps to crop {crop!r}, which is not a column of the phenotype table")
         v = pheno.loc[isolates, crop].astype(float)
-        out[h] = (np.log(v) - np.log(v).mean()) if scale == "log" else (v.rank() - v.rank().mean())
+        if scale == "z":      # standardised within host, as in the proposal
+            out[h] = (v - v.mean()) / v.std(ddof=1)
+        elif scale == "raw":  # centred sAUDPC
+            out[h] = v - v.mean()
+        elif scale == "log":
+            out[h] = np.log(v) - np.log(v).mean()
+        elif scale == "rank":
+            out[h] = v.rank() - v.rank().mean()
+        else:
+            raise ValueError(f"target_scale {scale!r}: use z, raw, log or rank")
     return pd.DataFrame(out)
 
 
 def build_panel(cfg: dict, counts: pd.DataFrame | None = None, meta: pd.DataFrame | None = None,
-                pheno: pd.DataFrame | None = None) -> Panel:
+                pheno: pd.DataFrame | None = None, timepoints: list[str] | None = None) -> Panel:
     if counts is None:
         counts, meta = load_expression(cfg)
     if pheno is None:
         pheno = load_phenotype(cfg)
-    m = meta[meta["inoculated"] & meta["hpi"].astype(str).isin(cfg["timepoints"])].copy()
+    tps = [str(t) for t in (timepoints or cfg["timepoints"])]
+    m = meta[meta["inoculated"] & meta["hpi"].astype(str).isin(tps)].copy()
     c = counts[m.index]
     if cfg.get("thin_to_equal_depth"):
         c = pd.concat([thin_to_depth(c[m.index[m["host"] == h]], seed=cfg["seed"]) for h in m["host"].unique()], axis=1)[m.index]

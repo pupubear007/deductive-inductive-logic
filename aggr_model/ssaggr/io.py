@@ -69,9 +69,17 @@ def load_expression(cfg: dict) -> tuple[pd.DataFrame, pd.DataFrame]:
 
 
 def load_phenotype(cfg: dict) -> pd.DataFrame:
-    """Isolate x crop matrix of mean sAUDPC (rows: canonical isolate names)."""
+    """Isolate x crop matrix of mean sAUDPC (rows: canonical isolate names). Accepts the long
+    format written by CH4_multicrop_aggressiveness.Rmd (TableS1_long.csv: crop, isolate, mean, ...)
+    or a wide isolate x crop table."""
     p = resolve(cfg, cfg["phenotype_table"])
-    df = pd.read_csv(p, index_col=0)
+    df = pd.read_csv(p)
+    cols = {c.lower(): c for c in df.columns}
+    if {"crop", "isolate", "mean"} <= set(cols):
+        df = df.rename(columns={cols["crop"]: "crop", cols["isolate"]: "isolate", cols["mean"]: "mean"})
+        df["isolate"] = df["isolate"].map(lambda x: canon(x, cfg))
+        return df.pivot_table(index="isolate", columns="crop", values="mean", aggfunc="mean")
+    df = df.set_index(df.columns[0])
     df.index = [canon(i, cfg) for i in df.index]
     crops = [c for c in df.columns if not c.lower().endswith("rank") and c.lower() not in ("mean rank", "rank range")]
     return df[crops].astype(float)
@@ -90,7 +98,13 @@ def sAUDPC(days: np.ndarray, values: np.ndarray) -> float:
 
 
 def load_lesions(cfg: dict) -> pd.DataFrame:
-    """Per-plant sAUDPC from lesion time-course files (columns '<k>dpi' or '<k>')."""
+    """Per-plant sAUDPC. Preferred: the per-plant table written by the CH4 pipeline
+    (``per_plant_saudpc``, columns crop, isolate, sAUDPC). Fallback: recompute from raw lesion
+    files (columns '<k>dpi'), which uses every rated day and may differ from the CH4 pipeline."""
+    if cfg.get("per_plant_saudpc"):
+        d = pd.read_csv(resolve(cfg, cfg["per_plant_saudpc"]))
+        d["isolate"] = d["isolate"].map(lambda x: canon(x, cfg))
+        return d[["crop", "isolate", "sAUDPC"]]
     rows = []
     for crop, p in (cfg.get("lesion_files") or {}).items():
         df = pd.read_csv(resolve(cfg, p), encoding="utf-8-sig")

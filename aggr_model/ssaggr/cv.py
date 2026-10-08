@@ -93,23 +93,45 @@ def summarize(pred: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(out).set_index("host")
 
 
+_G: dict = {}
+
+
+def _init(p, hosts, kind, cfg):
+    _G.update(p=p, hosts=hosts, kind=kind, cfg=cfg)
+
+
+def _perm_r2(perm: np.ndarray) -> dict:
+    p, cfg = _G["p"], _G["cfg"]
+    t = p.target.copy()
+    t.index = [p.isolates[j] for j in perm]
+    t = t.loc[p.isolates]
+    return summarize(loio(p, _G["hosts"], _G["kind"], cfg, t))["r2_loio"].to_dict()
+
+
 def permutation_test(p: Panel, hosts: list[str], kind: str, cfg: dict, observed: pd.DataFrame,
                      n_perm: int, seed: int = 0) -> pd.DataFrame:
-    """Null distribution of the LOIO R2 per host under random isolate-to-phenotype mapping."""
+    """Null distribution of the LOIO R2 per host under random isolate-to-phenotype mapping.
+    For 6 isolates and n_perm >= 719 every non-identity ordering is used exactly once."""
+    from itertools import permutations
+    from math import factorial
     rng = np.random.default_rng(seed)
+    n = len(p.isolates)
+    if n_perm >= factorial(n) - 1:
+        perms = [np.array(q) for q in permutations(range(n)) if list(q) != list(range(n))]
+    else:
+        perms = [rng.permutation(n) for _ in range(n_perm)]
     obs = summarize(observed)["r2_loio"]
-    null = {h: [] for h in obs.index}
-    for _ in range(n_perm):
-        perm = rng.permutation(len(p.isolates))
-        t = p.target.copy()
-        t.index = [p.isolates[j] for j in perm]
-        t = t.loc[p.isolates]
-        s = summarize(loio(p, hosts, kind, cfg, t))["r2_loio"]
-        for h in obs.index:
-            null[h].append(s.get(h, np.nan))
+    jobs = int(cfg.get("n_jobs") or 1)
+    if jobs > 1:
+        import multiprocessing as mp
+        with mp.get_context("fork").Pool(jobs, initializer=_init, initargs=(p, hosts, kind, cfg)) as pool:
+            res = pool.map(_perm_r2, perms, chunksize=max(1, len(perms) // (4 * jobs)))
+    else:
+        _init(p, hosts, kind, cfg)
+        res = [_perm_r2(q) for q in perms]
     rows = []
     for h in obs.index:
-        nv = np.array(null[h], float)
+        nv = np.array([r.get(h, np.nan) for r in res], float)
         nv = nv[np.isfinite(nv)]
         rows.append({"host": h, "r2_loio": obs[h], "p_perm": (1 + np.sum(nv >= obs[h] - 1e-12)) / (1 + len(nv)),
                      "n_perm": int(len(nv)), "null_mean": float(nv.mean()) if len(nv) else np.nan})
