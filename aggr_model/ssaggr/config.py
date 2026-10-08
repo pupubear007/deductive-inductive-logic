@@ -48,7 +48,7 @@ DEFAULTS: dict[str, Any] = {
     # --- model ----------------------------------------------------------------------------------
     "model": {
         "lambdas": [1.0, 0.5, 0.25, 0.1, 0.05],  # penalty path, relative to lambda_max
-        "host_penalty_ratio": 2.0,  # host-specific deviations v are penalised this much more
+        "host_penalty_ratio": 1.0,  # >1 penalises host-specific weights more (a prior for the fixed program); 1 = neutral
         "l1_ratio": 0.5,          # elastic-net mixing: 1 = lasso, smaller = more grouping
         "ridge": 1e-3,
         "max_iter": 5000,         # coordinate-descent sweeps
