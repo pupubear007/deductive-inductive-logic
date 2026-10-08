@@ -9,7 +9,7 @@ project:
   license: "Apache-2.0"
 
 sources:
-  - title: "A Philosophical-Mathematical Representation of Deductive and Inductive Logic: A Diagrammatic and Formal Analysis"
+  - title: "Deduction and Induction in One Diagram: A Machine-Checked Semantics with Applications to Quantum Information and Plant Disease Diagnosis"
     authors: ["Hsuan Fu Wang"]
     id: ../paper.pdf
     # Submitted version; the February 2025 manuscripts are in ../archive/.

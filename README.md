@@ -1,30 +1,34 @@
-# A Philosophical-Mathematical Representation of Deductive and Inductive Logic: A Diagrammatic and Formal Analysis
+# Deduction and Induction in One Diagram: A Machine-Checked Semantics with Applications to Quantum Information and Plant Disease Diagnosis
 
 [![CI](https://github.com/pupubear007/deductive-inductive-logic/actions/workflows/ci.yml/badge.svg)](https://github.com/pupubear007/deductive-inductive-logic/actions/workflows/ci.yml)
 
-**Hsuan Fu Wang** (independent researcher) · [hsuanfuwang@gmail.com](mailto:hsuanfuwang@gmail.com)
+**Hsuan Fu Wang**, Department of Plant Pathology, University of Minnesota ·
+[wan00965@umn.edu](mailto:wan00965@umn.edu)
 
 **Paper:** [`paper.pdf`](paper.pdf) (submission version, October 2026) ·
 **Lean formalization:** [`lean/`](lean/) · **Submission package:** [`submission/`](submission/)
 
-> We give a diagrammatic representation of deductive and inductive reasoning in which deduction is
-> a certain passage from thought to existence, and induction is a tentative, iterated passage from
-> the study of existence to the theory of thought. We make the diagram precise in a
-> possible-worlds semantics: thoughts are propositions about worlds, deduction is semantic
-> entailment, polarity distinguishes affirmation from modus tollens, and an inductive theory is
-> supported by a study when some world is consistent with both. Within this setting we prove that
-> deduction is sound and transitive, that iterated observation can only narrow the supported
-> theories, that a single counterexample falsifies a universal theory, and that no finite study
-> entails a universal theory over an unobserved individual. The last statement is a formal
-> version of Hume's problem of induction. As an application we realize the framework in quantum
-> information theory: thoughts become subspaces, deduction becomes certain measurement and unitary
-> evolution, induction becomes state tomography, and the classical setting is recovered as the
-> case of commuting observables. The quantum model reproduces refinement, falsification and
-> underdetermination, and adds a limitation with no classical counterpart: measurements in a
-> single basis never determine a quantum state. We further give a Bayesian refinement of support,
-> under which every genuine test a theory predicts confirms it, a ranked semantics for defeasible
-> inference, and an order on levels under which iteration moves upward. Every theorem of the paper
-> is verified in the Lean 4 proof assistant with Mathlib.
+> We give a diagrammatic representation of deductive and inductive reasoning in which deduction is a
+> certain passage from thought to existence, and induction is a tentative, iterated passage from the
+> study of existence to the theory of thought. We make the diagram precise in a possible-worlds
+> semantics: thoughts are propositions about worlds, deduction is semantic entailment, polarity
+> distinguishes affirmation from modus tollens, and an inductive theory is supported by a study when
+> some world is consistent with both. Within this setting we prove that deduction is sound and
+> transitive, that iterated observation can only narrow the supported theories, that a single
+> counterexample falsifies a universal theory, and that no finite study entails a universal theory
+> over an unobserved individual. The last statement is a formal version of Hume's problem of
+> induction. As an application we realize the framework in quantum information theory: thoughts
+> become subspaces, deduction becomes certain measurement and unitary evolution, induction becomes
+> state tomography, and the classical setting is recovered as the case of commuting observables. The
+> quantum model reproduces refinement, falsification and underdetermination; measurements in a
+> single basis never determine a quantum state. As a second application we read plant disease
+> diagnosis and forecasting in the framework: diagnosis is elimination and refinement, Koch's
+> postulates are hypothetico-deductive confirmation, forecasting rules are defeasible, and a new
+> theorem characterizes when an assay can resolve a diagnosis, of which the quantum basis limitation
+> is an instance. We further give a Bayesian refinement of support, under which every genuine test a
+> theory predicts confirms it, a ranked semantics for defeasible inference, and an order on levels
+> under which iteration moves upward. Every theorem of the paper is verified in the Lean 4 proof
+> assistant with Mathlib.
 
 ## Repository layout
 
@@ -34,7 +38,7 @@
 | [`paper/`](paper/) | LaTeX source |
 | [`lean/`](lean/) | Lean 4 formalization of every theorem (package `WangLogic`) |
 | [`submission/`](submission/) | arXiv source bundle, arXiv metadata, pre-submission checklist |
-| [`archive/`](archive/) | The February 2025 manuscripts this paper revises, and the list of changes |
+| [`archive/`](archive/) | Earlier versions: the February 2025 manuscripts with the list of changes, and version 1 of this paper without the plant-pathology application |
 
 ## Building
 
@@ -72,6 +76,7 @@ All declarations are in the namespace `WangLogic`. Appendix A of the paper has t
 | [`Levels.lean`](lean/WangLogic/Levels.lean) | §6.1 ordered levels |
 | [`Quantum.lean`](lean/WangLogic/Quantum.lean) | Props. 7.1, 7.3, 7.5 |
 | [`QuantumExtensions.lean`](lean/WangLogic/QuantumExtensions.lean) | Props. 7.2, 7.4, 7.6; entropy invariance |
+| [`Plant.lean`](lean/WangLogic/Plant.lean) | §8 plant disease diagnosis and forecasting |
 
 | Paper, Sections 3–6 | Lean |
 |---|---|
@@ -115,6 +120,16 @@ All declarations are in the namespace `WangLogic`. Appendix A of the paper has t
 | §7.6, `S(UρU†) = S(ρ)` | `vonNeumannEntropy_unitary_conj`, `vonNeumannEntropy_eq_sum_eigenvalues` |
 | Prop. 7.6, deduction and falsification under depolarizing noise | `born_depolarize_ge`, `noisy_spinUp_not_refuted` |
 
+| Paper, Section 8 | Lean |
+|---|---|
+| Def. 8.1, assay and resolution | `AssayResult`, `Resolves` |
+| Thm. 8.2, assay resolution | `resolves_iff` |
+| Cor. 8.3, underdetermination by an assay | `undetermined`, `Resolves.pair_left` |
+| Example 8.4, formae speciales of *Fusarium oxysporum* | `morphology_not_resolves`, `hostTest_resolves` |
+| Prop. 8.5, Koch's postulates | `confirms_of_entails`, `modus_tollens` |
+| Prop. 8.6, when a positive result raises the risk | `positive_raises_risk_iff` |
+| Prop. 8.7, a defeasible forecasting rule | `sclerotinia_nonmonotone`, `apothecia_normally_infected`, `noApothecia_normally_not_infected` |
+
 In Prop. 7.1 a projector is Mathlib's orthogonal projection `K.starProjection` onto a subspace of a
 finite-dimensional complex inner product space, and `P ≤ Q` is subspace inclusion. Elsewhere in
 Section 7 operators are complex matrices: a projector is a Hermitian idempotent matrix, a density
@@ -134,8 +149,8 @@ states Theorem 5.4 for independent checking with
 ```bibtex
 @unpublished{Wang2026DeductiveInductive,
   author = {Hsuan Fu Wang},
-  title  = {A Philosophical-Mathematical Representation of Deductive and Inductive Logic:
-            A Diagrammatic and Formal Analysis},
+  title  = {Deduction and Induction in One Diagram: A Machine-Checked Semantics with
+            Applications to Quantum Information and Plant Disease Diagnosis},
   note   = {Submitted. Lean formalization at
             \url{https://github.com/pupubear007/deductive-inductive-logic}},
   year   = {2026}

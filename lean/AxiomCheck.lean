@@ -71,3 +71,14 @@ open WangLogic
 #print axioms vonNeumannEntropy_unitary_conj
 #print axioms born_depolarize_ge
 #print axioms noisy_spinUp_not_refuted
+
+-- Section 8 (`Plant.lean`)
+#print axioms resolves_iff
+#print axioms undetermined
+#print axioms Resolves.pair_left
+#print axioms morphology_not_resolves
+#print axioms hostTest_resolves
+#print axioms positive_raises_risk_iff
+#print axioms apothecia_normally_infected
+#print axioms noApothecia_normally_not_infected
+#print axioms sclerotinia_nonmonotone
