@@ -1,0 +1,40 @@
+# Template for REAL data. Copy, then edit the assays / variables / modalities to match your files.
+# Run `python -m ssrforecast.validate --data <dir> --config <this file>` first.
+data_dir: data/real
+out_dir: runs/real
+task: forecast          # forecast: predict readings in (issue day, issue day + horizon]; nowcast: diagnose on the day
+horizon_days: 21
+issue_every_days: 7   # issue a forecast every 7 days and on every observation day
+lookback_days: 60
+split: {group_by: season, val_frac: 0.15, test_frac: 0.15}   # hold out whole seasons
+
+series_variables: [air_temp, rh, rain, leaf_wetness, soil_moisture]
+tabular:
+  numeric: [lat, lon, days_since_start, row_spacing_cm]
+  categorical: [experiment_type, cultivar, isolate, inoculation_method, fungicide]
+
+image_modalities:            # delete the ones you do not have
+  gc_rgb: {channels: 3, size: 64}
+  greenhouse_rgb: {channels: 3, size: 64}
+  field_rgb: {channels: 3, size: 64}
+  drone_rgb: {channels: 3, size: 64}
+  drone_ms: {channels: 5, size: 64}
+  satellite: {channels: 4, size: 32}
+
+# se / sp = sensitivity / specificity of the assay for its mechanism level.
+# 1.0 / 1.0 is the paper's idealised (sound and complete) assay. These are NOT estimates:
+# replace them with measured values, or set `learn: true` to estimate them from data.
+assays:
+  apothecia_scouting: {kind: binary, level: apothecia, se: 1.0, sp: 1.0}
+  spore_trap_qpcr:    {kind: binary, level: spore,     se: 1.0, sp: 1.0}
+  petal_qpcr:         {kind: binary, level: court,     se: 1.0, sp: 1.0}
+  stem_qpcr:          {kind: binary, level: infection, se: 1.0, sp: 1.0}
+  incidence:          {kind: fraction, level: infection, se: 1.0, sp: 1.0, scale: 1.0}   # 0-1; use scale: 100 if percent
+  dsi:                {kind: continuous, conditional_on: infection, scale: 100.0}
+  lesion_length_mm:   {kind: continuous, conditional_on: infection, scale: 100.0}
+  yield_kg_ha:        {kind: continuous, scale: 5000.0}
+
+model: {dim: 128, series_hidden: 64, image_width: 32, modality_dropout: 0.2}
+diffusion: {vector: true, map: true, steps: 100, map_size: 32, hidden: 256}
+loss_weights: {chain: 1.0, regression: 1.0, vector_diffusion: 0.5, map_diffusion: 0.5}
+train: {epochs: 40, batch_size: 32, lr: 0.001, weight_decay: 0.0001, device: auto, num_workers: 0, patience: 8, diffusion_epochs: 60}

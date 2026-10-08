@@ -1,0 +1,28 @@
+# Synthetic data from `python -m ssrforecast.synthetic`. se/sp below are the generator's
+# simulation settings (ssrforecast/synthetic.py: SYNTHETIC_SE_SP), not biological values.
+data_dir: data/synthetic
+out_dir: runs/synthetic
+task: forecast
+horizon_days: 60
+issue_every_days: 7   # issue a forecast every 7 days and on every observation day
+lookback_days: 45
+split: {group_by: season, val_frac: 0.15, test_frac: 0.25}
+series_variables: [air_temp, rh, rain, leaf_wetness, soil_moisture]
+tabular:
+  numeric: [lat, lon, days_since_start, row_spacing_cm, sclerotia_history]
+  categorical: [experiment_type, cultivar, isolate, inoculation_method, fungicide]
+image_modalities:
+  gc_rgb: {channels: 3, size: 64}
+  drone_rgb: {channels: 3, size: 64}
+  satellite: {channels: 4, size: 32}
+assays:
+  apothecia_scouting: {kind: binary, level: apothecia, se: 0.7, sp: 1.0}
+  spore_trap_qpcr:    {kind: binary, level: spore, se: 0.85, sp: 0.97}
+  petal_qpcr:         {kind: binary, level: court, se: 0.8, sp: 0.98}
+  stem_qpcr:          {kind: binary, level: infection, se: 0.95, sp: 0.99}
+  incidence:          {kind: fraction, level: infection, se: 1.0, sp: 1.0, scale: 1.0}
+  dsi:                {kind: continuous, conditional_on: infection, scale: 100.0}
+  lesion_length_mm:   {kind: continuous, conditional_on: infection, scale: 100.0}
+  yield_kg_ha:        {kind: continuous, scale: 5000.0}
+diffusion: {vector: true, map: true, steps: 50, map_size: 32, hidden: 256}
+train: {epochs: 25, batch_size: 32, lr: 0.001, weight_decay: 0.0001, device: auto, num_workers: 0, patience: 8, diffusion_epochs: 40}
