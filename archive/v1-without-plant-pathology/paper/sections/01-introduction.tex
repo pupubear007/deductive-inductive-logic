@@ -1,0 +1,55 @@
+\section{Introduction}\label{sec:intro}
+
+Deductive logic derives particular conclusions from general premises with certainty: all men are
+mortal; Socrates is a man; therefore Socrates is mortal~\cite{aristotle}. Inductive logic builds
+general theories from particular observations with only tentative support: many swans have been
+seen to be white, so perhaps all swans are white. Textual arguments and static diagrams, such as
+Venn diagrams and Peirce's existential graphs~\cite{peirce}, show the structure of a single
+inference well but do not show reasoning as a process in which deduction and induction alternate.
+
+This paper proposes a diagram (\cref{fig:framework}) that places both modes of reasoning in one
+picture, with a straight arrow for deduction, a circular arrow for induction, and a foundation of
+iterations, hypotheses, levels, binary states and polarities. We then give the diagram a precise
+semantics and prove what it asserts.
+
+\paragraph{Related work.} Diagrams as rigorous logical representations go back to Peirce and
+have been given formal semantics, for example for Venn diagrams by Shin~\cite{shin}; our diagram
+differs in depicting two modes of inference and their interaction rather than the content of a
+single argument. The semantics of \cref{sec:setting} is the standard possible-worlds
+reading of propositions~\cite{kripke}. Our qualitative notion of support is the consistency
+requirement underlying confirmation theory~\cite{hempel}, and its quantitative refinement in
+\cref{sec:confirmation} is Bayesian incremental confirmation~\cite{carnap,earman,fitelson}.
+Falsification follows Popper~\cite{popper}, and the treatment of defeasible inference in
+\cref{sec:defeasible} uses the preferential semantics of Kraus, Lehmann and
+Magidor~\cite{klm,makinson}. The quantum model draws on quantum logic~\cite{birkhoff,dallachiara}
+and quantum state tomography~\cite{hradil,nielsen}. Machine-checked formalization of philosophical
+arguments has been pursued with automated and interactive provers~\cite{fitelsonzalta,benzmuller};
+we use Lean~4 and Mathlib~\cite{lean4,mathlib}.
+
+\paragraph{Contributions.}
+\begin{enumerate}
+  \item A diagrammatic framework for deduction $\varphi\to\exists$ and induction
+        $s\exists\circlearrowright t\varphi$ (\cref{sec:framework}).
+  \item A possible-worlds semantics for every symbol of the diagram (\cref{sec:setting}).
+  \item Theorems for each mode: soundness, transitivity and modus tollens for deduction
+        (\cref{sec:deduction}); monotone refinement, falsification and the failure of
+        induction as deduction (\cref{thm:hume}) for induction (\cref{sec:induction}); and a
+        truth-value characterization of the foundation (\cref{sec:foundation}).
+  \item An application to quantum information theory (\cref{sec:quantum}): a dictionary from the
+        framework to quantum states, measurements and Hamiltonians; quantum counterparts of the
+        deductive and inductive theorems (\cref{prop:qsound,prop:qhume}); the classical
+        framework as the commuting case (\cref{prop:classical}); and physical implementations,
+        a thermodynamic reading and experimental proposals.
+  \item Three extensions: Bayesian confirmation as the quantitative inductive polarity
+        (\cref{sec:confirmation}), defeasible inference (\cref{sec:defeasible}), and ordered
+        levels (\cref{sec:levels}).
+  \item A machine-checked formalization of every theorem of
+        Sections~\ref{sec:deduction}--\ref{sec:quantum} in Lean~4~\cite{lean4} and
+        Mathlib~\cite{mathlib} (Appendix~\ref{app:formalization}).
+\end{enumerate}
+
+\paragraph{Outline.} \Cref{sec:framework} presents the diagram and \cref{sec:setting} its
+semantics. \Cref{sec:deduction,sec:induction,sec:foundation} prove the results for deduction,
+induction and the foundation, including the extensions. \Cref{sec:quantum} develops the quantum
+model, \cref{sec:discussion} discusses the results and their limitations, and
+Appendix~\ref{app:formalization} maps every result to its Lean declaration.

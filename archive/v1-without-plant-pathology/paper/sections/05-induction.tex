@@ -1,0 +1,179 @@
+\section{Induction}\label{sec:induction}
+
+\subsection{Iterative refinement}
+
+Iteration $i$ adds an observation to a study. The following results say that iteration can only
+narrow the set of supported theories, which is the precise sense in which induction refines.
+
+\begin{proposition}\label{prop:cons}
+If $(o,o_1,\dots,o_n)\circlearrowright t$, then $(o_1,\dots,o_n)\circlearrowright t$.
+\lean{Supported.of\_cons}
+\end{proposition}
+
+\begin{theorem}[Refinement is monotone]\label{thm:mono}
+If every observation of $s$ occurs in $s'$ and $s'\circlearrowright t$, then $s\circlearrowright t$.
+\lean{Supported.mono}
+\end{theorem}
+
+\begin{proof}
+A world witnessing $s'\circlearrowright t$ satisfies $t$ and every observation of $s'$, hence every
+observation of $s$. \Cref{prop:cons} is the case $s'=(o)\mathbin{+\!\!+}s$.
+\end{proof}
+
+\subsection{Falsification and the problem of induction}
+
+For the swan examples take worlds to be colourings $c:B\to\{\mathrm{true},\mathrm{false}\}$
+recording which birds are white. For a finite list $\mathit{seen}$ of birds define
+\[
+  \Seen_{\mathit{seen}}(c) :\Longleftrightarrow \forall x\in\mathit{seen},\ c(x)=\mathrm{true},
+  \qquad
+  \All(c) :\Longleftrightarrow \forall x\in B,\ c(x)=\mathrm{true}.
+\]
+
+\begin{proposition}[Falsification]\label{prop:popper}
+If $\mathrm{Swan}(b)$ and $\neg\mathrm{White}(b)$, then
+$\neg\,\forall x,\ \mathrm{Swan}(x)\to\mathrm{White}(x)$.
+\lean{falsification}
+\end{proposition}
+
+\begin{proof}
+Instantiate the universal statement at $b$.
+\end{proof}
+
+Falsification is deductive: a single observation settles the matter, in line with
+Popper~\cite{popper}. Confirmation is not, however many observations are made.
+
+\begin{theorem}[Induction is not deduction]\label{thm:hume}
+Let $B$ have decidable equality, let $\mathit{seen}$ be a finite list of birds, and let
+$b\in B$ with $b\notin\mathit{seen}$. Then $\Seen_{\mathit{seen}}\not\models\All$.
+\lean{induction\_not\_deduction}
+\end{theorem}
+
+\begin{proof}
+Define $c(x)=\mathrm{false}$ if $x=b$ and $c(x)=\mathrm{true}$ otherwise. Every $x\in\mathit{seen}$
+differs from $b$, so $c(x)=\mathrm{true}$ and $\Seen_{\mathit{seen}}(c)$ holds. But
+$c(b)=\mathrm{false}$, so $\All(c)$ fails. Hence the worlds satisfying
+$\Seen_{\mathit{seen}}$ are not contained in those satisfying $\All$.
+\end{proof}
+
+\begin{proposition}[Inductive swan]\label{prop:supported}
+For every finite list $\mathit{seen}$, $(\Seen_{\mathit{seen}})\circlearrowright\All$.
+\lean{allWhite\_supported}
+\end{proposition}
+
+\begin{proof}
+The colouring that makes every bird white satisfies both.
+\end{proof}
+
+Together, \cref{thm:hume} and \cref{prop:supported} state the asymmetry the diagram depicts:
+the theory ``all swans are white'' remains supported by every finite study, so it may be held along
+the circular arrow, but no finite study entails it, so it never travels the straight arrow. This is
+a formal version of Hume's problem of induction~\cite{hume}.
+
+\subsection{Quantitative support: Bayesian confirmation}\label{sec:confirmation}
+
+Support is qualitative: it asks only whether a theory survives the study. The inductive
+polarity $t\varphi^{\up}$ suggests more, an ``ascending probability'': the study should make the
+theory more probable. This is the notion of incremental confirmation in Bayesian confirmation
+theory~\cite{carnap,earman,fitelson}. We make it precise for a finite set of worlds.
+
+\begin{definition}[Prior and confirmation]\label{def:confirm}
+Let $\W$ be finite. A \emph{prior} is a weight $p:\W\to(0,\infty)$; it defines
+$P(\varphi)=\sum_{\varphi(w)}p(w)\big/\sum_{w}p(w)$ and
+$P(t\mid s)=P(t\wedge s)/P(s)$, where a study $s$ is read as the conjunction of its observations.
+The study \emph{confirms} $t$, written $t\varphi^{\up}$, if $P(t\mid s)>P(t)$, and
+\emph{disconfirms} it, $t\varphi^{\down}$, if $P(t\mid s)<P(t)$.
+\lean{Confirms, Disconfirms}
+\end{definition}
+
+\begin{proposition}[Confirmation implies support]\label{prop:confsupp}
+If $s$ confirms $t$, then $s\circlearrowright t$.
+\lean{Confirms.supported}
+\end{proposition}
+
+\begin{proof}
+$P(t\mid s)>P(t)\ge0$, so $P(t\wedge s)>0$, and \cref{rem:probability} applies.
+\end{proof}
+
+\begin{theorem}[Hypothetico-deductive confirmation]\label{thm:hd}
+Suppose $t$ is satisfiable, $t\models s$, and some world falsifies $s$. Then $s$ confirms $t$.
+\lean{confirms\_of\_entails}
+\end{theorem}
+
+\begin{proof}
+Since $t\models s$, $P(t\wedge s)=P(t)>0$, so $P(t\mid s)=P(t)/P(s)$. A world falsifying $s$ has
+positive weight, so $P(s)<1$ and $P(t)/P(s)>P(t)$.
+\end{proof}
+
+\Cref{thm:hd} joins the two arrows: a theory gains probability from a study exactly of the kind it
+deductively predicts, provided the study was a genuine test (it could have failed).
+
+\begin{proposition}[Iteration raises confirmation]\label{prop:ascend}
+If $t$ is satisfiable, $t\models s'$ and $s'\models s$, then $P(t\mid s)\le P(t\mid s')$.
+\lean{condProb\_mono}
+\end{proposition}
+
+\begin{proof}
+Both posteriors equal $P(t)$ divided by the probability of the study, and $P(s')\le P(s)$.
+\end{proof}
+
+\begin{proposition}[Falsification, quantitatively]\label{prop:qpopper}
+If $s\models\neg t$ and $t$ is satisfiable, then $P(t\mid s)=0<P(t)$, so $s$ disconfirms $t$.
+\lean{Disconfirms.of\_refutes}
+\end{proposition}
+
+\begin{corollary}[Bayesian swan]\label{cor:bswan}
+Let $B$ be finite and fix any prior on colourings. For every non-empty list $\mathit{seen}$,
+$(\Seen_{\mathit{seen}})$ confirms $\All$; and if every bird of $\mathit{seen}$ occurs in
+$\mathit{seen}'$, then $P(\All\mid\Seen_{\mathit{seen}})\le P(\All\mid\Seen_{\mathit{seen}'})$.
+\lean{allWhite\_confirmed, allWhite\_condProb\_mono}
+\end{corollary}
+
+\begin{proof}
+$\All\models\Seen_{\mathit{seen}}$, the all-white colouring satisfies $\All$, and the all-black
+colouring falsifies $\Seen_{\mathit{seen}}$; apply \cref{thm:hd} and \cref{prop:ascend}.
+\end{proof}
+
+With \cref{thm:hume}, \cref{cor:bswan} gives the full inductive picture: white sightings raise the
+probability of ``all swans are white'' at every step, yet never entail it, while one black swan
+sends its probability to $0$ (\cref{prop:qpopper}). This is the ascending probability of the
+circular arrow.
+
+\subsection{Defeasible inference}\label{sec:defeasible}
+
+Between certain deduction and probabilistic confirmation lies defeasible inference: conclusions
+drawn from several premises that hold normally but may be withdrawn. We use the ranked semantics
+of Kraus, Lehmann and Magidor~\cite{klm}.
+
+\begin{definition}[Defeasible entailment]\label{def:normally}
+A \emph{ranking} is a map $r:\W\to\mathbb N$, lower ranks being more normal. Premises
+$\Gamma=(\gamma_1,\dots,\gamma_n)$ \emph{defeasibly entail} $\psi$, written $\Gamma\mathrel{|\!\sim}\psi$,
+if $\psi$ holds in every $r$-minimal world satisfying all $\gamma_k$.
+\lean{Normally, NormallyFrom}
+\end{definition}
+
+\begin{theorem}[Preferential reasoning]\label{thm:klm}
+Defeasible entailment contains entailment ($\varphi\models\psi$ implies
+$\varphi\mathrel{|\!\sim}\psi$) and satisfies right weakening, \textup{\textsc{And}}, \textup{\textsc{Or}},
+\textup{\textsc{Cut}} and cautious monotonicity: if $\varphi\mathrel{|\!\sim}\psi$ and
+$\varphi\mathrel{|\!\sim}\chi$ then $\varphi\wedge\psi\mathrel{|\!\sim}\chi$.
+\lean{Normally.of\_entails, Normally.cautious\_mono}
+\end{theorem}
+
+\begin{proof}
+All but cautious monotonicity are immediate from the definition. For cautious monotonicity let
+$w$ be minimal among $\varphi\wedge\psi$-worlds and $v$ any $\varphi$-world. Since ranks are natural
+numbers there is a minimal $\varphi$-world $m$ with $r(m)\le r(v)$; it satisfies $\psi$, so
+$r(w)\le r(m)\le r(v)$. Thus $w$ is minimal among $\varphi$-worlds and satisfies $\chi$.
+\end{proof}
+
+\begin{proposition}[Defeasible inference is nonmonotone]\label{prop:tweety}
+With worlds $(\mathrm{penguin},\mathrm{flies})\in\{0,1\}^2$ ranked so that flying non-penguins are
+most normal and flightless penguins next, a bird normally flies, $()\mathrel{|\!\sim}\mathrm{flies}$,
+but $(\mathrm{penguin})\not\mathrel{|\!\sim}\mathrm{flies}$.
+\lean{normally\_nonmonotone}
+\end{proposition}
+
+By contrast, entailment is monotone in its premises (\texttt{entails\_premises\_mono}). Defeasible
+inference thus sits between the arrows: like deduction it is closed under the rules of
+\cref{thm:klm}, and like induction it can be overturned by new information.

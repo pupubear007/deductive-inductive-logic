@@ -4,6 +4,7 @@
 |---|---|
 | [`wang-2025-deductive-inductive-logic.pdf`](wang-2025-deductive-inductive-logic.pdf) | *A Philosophical-Mathematical Representation of Deductive and Inductive Logic: A Diagrammatic and Formal Analysis*, February 2025 |
 | [`wang-2025-quantum-model.pdf`](wang-2025-quantum-model.pdf) | *A Quantum Information Theoretic Model for the Philosophical-Mathematical Representation of Deductive and Inductive Logic*, February 2025; adapted as Section 7 of the paper |
+| [`v1-without-plant-pathology/`](v1-without-plant-pathology/) | *A Philosophical-Mathematical Representation of Deductive and Inductive Logic: A Diagrammatic and Formal Analysis*, October 2026 submission version (17 pages), before the plant-pathology application was added |
 
 ## Changes from the February 2025 manuscripts
 

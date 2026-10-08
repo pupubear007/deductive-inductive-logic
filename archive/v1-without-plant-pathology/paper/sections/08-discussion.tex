@@ -1,0 +1,86 @@
+\section{Discussion}\label{sec:discussion}
+
+\paragraph{Philosophy.} The straight arrow carries Descartes' movement from thought to
+existence~\cite{descartes}: what is entailed holds in every world where the premises hold
+(\cref{thm:sound}). The circular arrow carries Hume's and Popper's view of induction: a
+generalization is supported, never entailed (\cref{thm:hume}), and can be overturned by a single
+counterexample (\cref{prop:popper}). Levels $l$ in the foundation give a place for Kant's
+hierarchical structuring of thought~\cite{kant}.
+
+\paragraph{Quantum analogies.} The quantum model of \cref{sec:quantum} suggests three further
+analogies, which we state as analogies rather than results.
+\emph{Complementarity}: as quantum objects show wave and particle aspects, reasoning involves both
+abstract thought ($\varphi$) and concrete existence ($\exists$).
+\emph{Uncertainty}: incompatible observables cannot both be sharp, which is a physical limitation on
+what any study can reveal, distinct from Hume's logical one (\cref{prop:qhume}(4)).
+\emph{Entanglement}: entangled systems show correlations that no classical model reproduces,
+suggesting that logical relations between parts of a system need not reduce to relations between
+the parts; these correlations cannot be used to signal, so they do not conflict with causality.
+These views connect to the idea that physical processes are computations~\cite{deutsch,lloyd}.
+
+\paragraph{Education and cognition.} The top row of the diagram is suitable for a first course in
+logic; the foundation invites discussion of polarity and iteration. The visual layout follows
+the view that diagrams make inferential structure explicit~\cite{larkin,johnsonlaird}.
+
+\paragraph{Limitations and future work.}
+\begin{itemize}
+  \item \emph{Infinite sets of worlds.} The confirmation results of \cref{sec:confirmation} assume
+        finitely many worlds. For infinite or continuous sets of worlds the same definitions can be
+        stated with measures and conditional measures, and we expect
+        \cref{thm:hd,prop:ascend} to carry over for theories of positive prior probability. The
+        sign of confirmation does not depend on the prior (\cref{cor:bswan}); its size does.
+  \item \emph{Hypotheses and iterations.} Levels are now ordered (\cref{sec:levels}), but the
+        hypothesis index $h$ remains uninterpreted. A natural reading lets $h$ index a partition of
+        $\W$, the distinctions a study under $h$ can draw, so that a theory is identifiable under
+        $h$ only if it is a union of cells. \Cref{prop:qhume}(4) is the quantum instance.
+  \item \emph{Higher-order logic.} Every theorem is proved for an arbitrary type of worlds,
+        including function spaces: in the swan examples a world is a predicate on birds, so $\All$
+        already quantifies over a predicate. A higher-order logic with its own syntax and proof
+        system is not treated; Henkin semantics~\cite{henkin}, with soundness proved against the
+        possible-worlds reading, is the natural route.
+  \item \emph{Physical realization.} The quantum model is limited in practice by decoherence,
+        state-preparation and measurement errors, and scale~\cite{preskill,arute}.
+        \Cref{prop:noise} quantifies the effect of depolarizing noise on both arrows. Showing that
+        the three-qubit repetition code restores deductive certainty to order $\varepsilon^2$ is a
+        next step; error-corrected implementations remain experimental work.
+  \item \emph{Thermodynamics.} Landauer's principle is a physical law, assumed rather than
+        derived. The inequality $H(T\mid S)\le H(T)$ is a standard consequence of the concavity of
+        entropy but is not formalized here.
+  \item \emph{Learners.} Whether the diagram helps learners is an empirical question. We propose a
+        preregistered randomized trial: students in an introductory logic course receive a lesson
+        built on the diagram or the same lesson in prose, and are tested on classifying arguments
+        as deductive or inductive, on recognizing fallacies (affirming the consequent, hasty
+        generalization) and on predicting the effect of a counterexample, with a retention test
+        four weeks later. Detecting a medium effect ($d=0.5$) with power $0.8$ at $\alpha=0.05$
+        requires about $64$ students per arm.
+\end{itemize}
+
+\section{Conclusion}
+
+We have given a diagram for deduction and induction, a possible-worlds semantics for its symbols,
+and machine-checked theorems for what it depicts: deduction is certain and transitive, negative
+polarity is modus tollens, iteration narrows the supported theories, one counterexample falsifies,
+and no finite study entails a universal theory. Bayesian confirmation makes the ascending
+probability of the circular arrow precise: a theory is confirmed by every genuine test it
+predicts, more so as the tests accumulate, yet never entailed. Defeasible inference sits between
+the two arrows, and ordered levels show iteration moving upward. Realized in quantum information
+theory, the same structure appears as certain measurement and unitary evolution on one side and
+state tomography on the other, with the classical framework as the commuting case and with a
+physical limit on induction that has no classical counterpart. This suggests that quantum
+mechanics offers a natural physical setting for the interplay of deduction and induction.
+
+\section*{Statements and declarations}
+\addcontentsline{toc}{section}{Statements and declarations}
+
+\paragraph{Code availability.} The Lean~4 formalization (toolchain \texttt{v4.34.1}, Mathlib
+commit \texttt{d13f23b7}) is in the directory \texttt{lean} of the repository
+\begin{center}\url{https://github.com/pupubear007/deductive-inductive-logic}\end{center}
+Appendix~\ref{app:formalization} lists the declaration proving each result.
+
+\paragraph{Funding.} The author received no funding for this work.
+
+\paragraph{Competing interests.} The author has no competing interests to declare.
+
+\paragraph{Use of AI tools.} The Lean formalization and parts of the text were prepared with the
+assistance of an AI coding assistant (Claude Code, Anthropic). All proofs are checked by the Lean
+kernel. The author takes full responsibility for the content of the paper.

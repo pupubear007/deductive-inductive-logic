@@ -38,7 +38,7 @@
 | [`paper/`](paper/) | LaTeX source |
 | [`lean/`](lean/) | Lean 4 formalization of every theorem (package `WangLogic`) |
 | [`submission/`](submission/) | arXiv source bundle, arXiv metadata, pre-submission checklist |
-| [`archive/`](archive/) | The February 2025 manuscripts this paper revises, and the list of changes |
+| [`archive/`](archive/) | Earlier versions: the February 2025 manuscripts with the list of changes, and version 1 of this paper without the plant-pathology application |
 
 ## Building
 
