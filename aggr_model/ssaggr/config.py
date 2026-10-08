@@ -47,12 +47,12 @@ DEFAULTS: dict[str, Any] = {
     "stability_cutoffs": {},   # e.g. {mean_rank_min_high: 9, rank_range_max_consistent: 5}
     # --- model ----------------------------------------------------------------------------------
     "model": {
-        "lambdas": [1.0, 0.5, 0.25, 0.1, 0.05, 0.025],  # L1 path (relative to lambda_max)
+        "lambdas": [1.0, 0.5, 0.25, 0.1, 0.05],  # penalty path, relative to lambda_max
         "host_penalty_ratio": 2.0,  # host-specific deviations v are penalised this much more
         "l1_ratio": 0.5,          # elastic-net mixing: 1 = lasso, smaller = more grouping
         "ridge": 1e-3,
-        "max_iter": 400,
-        "tol": 1e-6,
+        "max_iter": 5000,         # coordinate-descent sweeps
+        "tol": 1e-4,              # duality-gap tolerance (scikit-learn)
     },
     "n_permutations": 100,   # isolate-label permutations for the null distribution (720 = all for 6)
     "n_bootstrap": 50,       # bootstrap resamples of libraries for stability selection

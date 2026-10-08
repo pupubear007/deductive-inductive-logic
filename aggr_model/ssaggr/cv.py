@@ -16,7 +16,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from .model import fit, gene_weights, lambda_max, predict
+from .model import fit, fit_path, gene_weights, lambda_max, predict
 from .panel import Panel, design, fit_prep
 
 
@@ -40,7 +40,7 @@ def select_and_fit(p: Panel, train_iso: list[str], hosts: list[str], kind: str, 
     train = p.libs(train_iso, hosts)
     prep = fit_prep(p, train, cfg["top_variable_genes"])
     d_all = design(p, train, prep, cfg, target)
-    lmax = lambda_max(d_all)
+    lmax = lambda_max(d_all, mc["l1_ratio"])
     lams = [r * lmax for r in mc["lambdas"]]
     best_lam, best_err = lams[0], np.inf
     if len(train_iso) >= 3:
@@ -49,9 +49,8 @@ def select_and_fit(p: Panel, train_iso: list[str], hosts: list[str], kind: str, 
             inner = [i for i in train_iso if i != iso]
             tr, te = p.libs(inner, hosts), p.libs([iso], hosts)
             d_tr, d_te = design(p, tr, prep, cfg, target), design(p, te, prep, cfg, target)
-            beta = None
-            for k, lam in enumerate(lams):  # warm start down the path
-                beta = fit(d_tr, lam, kind, mc["host_penalty_ratio"], mc["ridge"], mc["max_iter"], mc["tol"], beta, mc["l1_ratio"])
+            path = fit_path(d_tr, lams, kind, mc["host_penalty_ratio"], mc["l1_ratio"], mc["tol"], mc["max_iter"])
+            for k, beta in enumerate(path):
                 im = _isolate_means(p, te, predict(d_te, beta, kind))
                 obs = np.array([target.loc[r.isolate, r.host] for r in im.itertuples()])
                 errs[k] += float(np.mean((im["pred"].to_numpy() - obs) ** 2))
@@ -179,10 +178,10 @@ def stability_selection(p: Panel, host: str, cfg: dict, seed: int = 0, lam_facto
             for _, g in m.groupby("isolate"):
                 pick.extend(rng.choice(g.index.to_numpy(), size=len(g), replace=True))
             d = design(p, pd.Index(pick), prep_f, cfg)
-            lmax = lambda_max(d)
-            b = None
-            for f in lam_factors:
-                b = fit(d, lam_rel * f * lmax, "fixed", mc["host_penalty_ratio"], mc["ridge"], mc["max_iter"], mc["tol"], b, mc["l1_ratio"])
+            lmax = lambda_max(d, mc["l1_ratio"])
+            path = fit_path(d, [lam_rel * f * lmax for f in lam_factors], "fixed", mc["host_penalty_ratio"],
+                            mc["l1_ratio"], mc["tol"], mc["max_iter"])
+            for f, b in zip(lam_factors, path):
                 w = gene_weights(b, d, "fixed")["w"]
                 for j in np.flatnonzero(w):
                     g_ = prep_f.genes[j]

@@ -1,4 +1,4 @@
-"""Sparse hierarchical regression of aggressiveness on pathogen expression (trained by FISTA).
+"""Sparse hierarchical regression of aggressiveness on pathogen expression (weighted elastic net).
 
 For library n of isolate i on host h (time point t),
 
@@ -13,7 +13,7 @@ For library n of isolate i on host h (time point t),
   map is retuned on each host). They carry a larger L1 penalty, so they are used only where the
   data demand it.
 
-L1 penalties give exact zeros (FISTA with soft-thresholding), so the non-zero genes are the
+L1 penalties give exact zeros, so the non-zero genes are the
 candidate aggressiveness determinants. Library weights make every (isolate, host) cell count
 equally, so isolates with more libraries do not dominate: the isolate, not the library, is the
 unit of evidence.
@@ -53,45 +53,66 @@ def build_matrix(d: Design, kind: str) -> tuple[np.ndarray, np.ndarray]:
     return np.hstack(blocks), np.concatenate(pen)
 
 
-def lambda_max(d: Design) -> float:
-    """Smallest L1 weight that sets every gene weight to zero (after fitting intercepts)."""
-    r = d.y.copy()
-    for g in range(d.n_groups):
-        m = d.group == g
-        if m.any():
-            r[m] -= np.average(d.y[m], weights=d.weight[m])
-    return float(np.max(np.abs(d.X.T @ (d.weight * r)))) + 1e-12
+def _split(d: Design, kind: str, host_ratio: float):
+    D, pen = build_matrix(d, kind)
+    pen = np.where(pen < 0, host_ratio, pen)
+    un = pen == 0
+    return D[:, un], D[:, ~un], pen[~un], un
+
+
+def _project_out(U: np.ndarray, w: np.ndarray, *arrs):
+    """Weighted residuals after regressing on the unpenalised columns U (Frisch-Waugh-Lovell): the
+    penalised problem on the residuals has exactly the same solution for the gene weights."""
+    UtW = U.T * w
+    G = np.linalg.pinv(UtW @ U)
+    return [A - U @ (G @ (UtW @ A)) for A in arrs], G, UtW
+
+
+def lambda_max(d: Design, l1_ratio: float = 0.5) -> float:
+    """Smallest penalty at which every gene weight is zero (after the unpenalised terms)."""
+    U, X, pen, _ = _split(d, "fixed", 1.0)
+    (yr,), _, _ = _project_out(U, d.weight, d.y)
+    return float(np.max(np.abs(X.T @ (d.weight * yr)))) / max(l1_ratio, 1e-3) + 1e-12
+
+
+def fit_path(d: Design, lams: list[float], kind: str = "fixed", host_ratio: float = 2.0,
+             l1_ratio: float = 0.5, tol: float = 1e-4, max_iter: int = 5000) -> list[np.ndarray]:
+    """Weighted elastic net along a decreasing path of penalties (warm-started coordinate descent):
+
+        minimise 0.5 * sum_n w_n (y_n - D_n b)^2 + lam * sum_j pen_j [l1_ratio |b_j| + (1 - l1_ratio)/2 b_j^2]
+
+    over gene weights (pen_j = 1 shared, = host_ratio host-specific); group intercepts and the
+    colonization slope are unpenalised and profiled out exactly. The per-column penalty factor is
+    applied by rescaling columns (exact for the L1 part; the L2 part then scales with pen_j^2). The
+    L2 part keeps co-expressed genes together instead of picking one of them at random.
+    Returns one full coefficient vector per penalty, in the order given."""
+    import warnings
+    from sklearn.linear_model import enet_path
+    U, X, pen, un = _split(d, kind, host_ratio)
+    w = d.weight
+    (Xr, yr), G, UtW = _project_out(U, w, X, d.y)
+    sw = np.sqrt(w * len(w))  # sample weights folded into the rows (sklearn scales by 1/n)
+    Xs = (Xr / pen[None, :]) * sw[:, None]
+    ys = yr * sw
+    order = np.argsort(lams)[::-1]
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        _, coefs, _ = enet_path(Xs, ys, l1_ratio=l1_ratio, alphas=np.asarray(lams, float)[order],
+                                tol=tol, max_iter=max_iter)
+    out: list[np.ndarray] = [None] * len(lams)  # type: ignore[list-item]
+    for k, j in enumerate(order):
+        b_pen = coefs[:, k] / pen
+        beta = np.zeros(len(un))
+        beta[un] = G @ (UtW @ (d.y - X @ b_pen))
+        beta[~un] = b_pen
+        out[j] = beta
+    return out
 
 
 def fit(d: Design, lam: float, kind: str = "fixed", host_ratio: float = 2.0, ridge: float = 1e-3,
-        max_iter: int = 400, tol: float = 1e-6, beta0: np.ndarray | None = None, l1_ratio: float = 0.5) -> np.ndarray:
-    """Elastic net: minimise 0.5 * sum_n w_n (y_n - D_n b)^2
-         + lam * sum_j pen_j [ l1_ratio |b_j| + (1 - l1_ratio)/2 b_j^2 ] + ridge/2 |b_pen|^2
-    by FISTA with soft-thresholding (exact zeros for unselected genes). The L2 part keeps groups of
-    co-expressed genes together instead of picking one of them at random, which matters because
-    aggressiveness-associated genes are strongly co-regulated."""
-    D, pen = build_matrix(d, kind)
-    pen = np.where(pen < 0, host_ratio, pen)
-    w, y = d.weight, d.y
-    sw = np.sqrt(w)[:, None]
-    l2 = ridge + lam * (1.0 - l1_ratio) * pen
-    L = float(np.linalg.norm(D * sw, 2) ** 2) + float(l2.max()) + 1e-12
-    step = 1.0 / L
-    beta = np.zeros(D.shape[1]) if beta0 is None or beta0.shape[0] != D.shape[1] else beta0.copy()
-    z, t = beta.copy(), 1.0
-    thr = step * lam * l1_ratio * pen
-    rmask = (pen > 0).astype(float) * l2
-    for _ in range(max_iter):
-        grad = D.T @ (w * (D @ z - y)) + rmask * z
-        b_new = z - step * grad
-        b_new = np.sign(b_new) * np.maximum(np.abs(b_new) - thr, 0.0)
-        t_new = (1 + (1 + 4 * t * t) ** 0.5) / 2
-        z = b_new + ((t - 1) / t_new) * (b_new - beta)
-        if np.max(np.abs(b_new - beta)) < tol:
-            beta = b_new
-            break
-        beta, t = b_new, t_new
-    return beta
+        max_iter: int = 5000, tol: float = 1e-4, beta0: np.ndarray | None = None, l1_ratio: float = 0.5) -> np.ndarray:
+    """Single penalty; see fit_path. ``ridge`` and ``beta0`` are kept for API compatibility."""
+    return fit_path(d, [lam], kind, host_ratio, l1_ratio, tol, max(max_iter, 1000))[0]
 
 
 def predict(d: Design, beta: np.ndarray, kind: str) -> np.ndarray:
