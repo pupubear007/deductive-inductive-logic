@@ -5,8 +5,8 @@ Paste everything below the line into Claude Code, opened in a clone of
 
 ---
 
-You are working in my repository `deductive-inductive-logic`, on branch `ssr-forecast-model`
-(run `git checkout ssr-forecast-model`). The folder `ssr_model/` holds `ssrforecast`, a PyTorch
+You are working in my repository `deductive-inductive-logic`, on branch `ssr-trial-phenotyping`
+(run `git checkout ssr-trial-phenotyping`). The folder `ssr_model/` holds `ssrforecast`, a PyTorch
 model for Sclerotinia stem rot (SSR) of soybean. Its structure follows my paper (`paper.pdf`,
 Section 8, plus the Lean files in `lean/WangLogic/`): hard gates are entailments, step kernels
 are defeasible rules, level probabilities are the Bayesian layer, and two conditional diffusion
@@ -51,7 +51,7 @@ heads act as a learned prior over worlds.
   `chain_probabilities` with an unconstrained classifier, never use data after the issue day as
   input, and never split rows at random for reported metrics.
 - Do not invent biological parameter values. If something needs one, ask me.
-- Commit on `ssr-forecast-model` in small commits with clear messages. Do not push to `main`.
+- Commit on `ssr-trial-phenotyping` in small commits with clear messages. Do not push to `main`.
 - When you finish a step, tell me in a few lines what changed and what you need from me next.
 
 **Later extensions, not now:** a pretrained image backbone for drone and satellite data; an

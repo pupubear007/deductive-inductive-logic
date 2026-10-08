@@ -38,7 +38,7 @@
 | [`paper/`](paper/) | LaTeX source |
 | [`lean/`](lean/) | Lean 4 formalization of every theorem (package `WangLogic`) |
 | [`submission/`](submission/) | arXiv source bundle, arXiv metadata, pre-submission checklist |
-| [`ssr_model/`](ssr_model/) | Trainable Sclerotinia stem rot forecast (PyTorch) built on the framework: gated level chain, assay channels, conditional diffusion heads (branch `ssr-forecast-model`, work in progress) |
+| [`ssr_model/`](ssr_model/) | Trainable Sclerotinia stem rot forecast (PyTorch) built on the framework: gated level chain, assay channels, conditional diffusion heads (branch `ssr-trial-phenotyping`, work in progress) |
 | [`archive/`](archive/) | Earlier versions: the February 2025 manuscripts with the list of changes, and version 1 of this paper without the plant-pathology application |
 
 ## Building
