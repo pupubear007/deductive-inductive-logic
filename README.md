@@ -2,7 +2,8 @@
 
 [![CI](https://github.com/pupubear007/deductive-inductive-logic/actions/workflows/ci.yml/badge.svg)](https://github.com/pupubear007/deductive-inductive-logic/actions/workflows/ci.yml)
 
-**Hsuan Fu Wang** (independent researcher) · [hsuanfuwang@gmail.com](mailto:hsuanfuwang@gmail.com)
+**Hsuan Fu Wang**, PhD candidate, Department of Plant Pathology, University of Minnesota ·
+[wan00965@umn.edu](mailto:wan00965@umn.edu)
 
 **Paper:** [`paper.pdf`](paper.pdf) (submission version, October 2026) ·
 **Lean formalization:** [`lean/`](lean/) · **Submission package:** [`submission/`](submission/)

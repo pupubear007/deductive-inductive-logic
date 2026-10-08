@@ -5,8 +5,8 @@ type: software
 authors:
   - family-names: Wang
     given-names: Hsuan Fu
-    email: hsuanfuwang@gmail.com
-    affiliation: Independent researcher
+    email: wan00965@umn.edu
+    affiliation: "Department of Plant Pathology, University of Minnesota"
 repository-code: "https://github.com/pupubear007/deductive-inductive-logic"
 license: Apache-2.0
 keywords:
@@ -28,6 +28,6 @@ preferred-citation:
   authors:
     - family-names: Wang
       given-names: Hsuan Fu
-      affiliation: Independent researcher
+      affiliation: "Department of Plant Pathology, University of Minnesota"
   year: 2026
   status: submitted
