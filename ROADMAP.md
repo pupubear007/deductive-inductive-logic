@@ -16,6 +16,44 @@ domain question, and a formal result checked in Lean.
 | 3 | Cell | Cell models from sequencing data | **Next** (data in hand) |
 | 4 | Device and landscape | Transport: microfluidics, spore dispersal, AFM mechanics | Later (after coursework and access) |
 
+## Working order
+
+The thesis comes first; these steps run alongside it. Each step should be finished before the next
+in its column starts. The two tracks can run in parallel at different intensities.
+
+**Step 0. Now (next few weeks): close Stage 1**
+1. Meet the advisor with the paper and this roadmap, and go through the questions at the end.
+2. Learn every proof in the paper well enough to explain it on a whiteboard.
+3. Correct the funding statement and the acknowledgements; merge the revision pull request.
+4. Get a Zenodo DOI for the repository, add it to the paper, and post the preprint on arXiv
+   (endorsement if needed).
+
+**Step 1. Main track: Stage 2, evaluation before modelling**
+1. Choose the pathosystem and dataset with the advisor.
+2. Build the evaluation pipeline first: discrimination, calibration, decision value, and
+   leave-one-site-year-out validation. Test it on an *existing* forecast model. This is cheap,
+   useful on its own, and possibly a first applied paper.
+3. Run the Thm 8.2 diagnostic: find the unresolved field-seasons and rank candidate extra
+   assays.
+4. Then build the three-layer forecast model and compare it with the existing one, using the
+   same pipeline.
+5. In Lean: the cost–loss threshold and resolution under a noisy assay. Both are short, and they
+   become the formal part of the Stage 2 paper.
+
+**Step 2. Side track at low intensity: Stage 3 groundwork**
+1. Take an inventory of the sequencing data: organism, design, conditions, time points.
+2. Pick one pathway or response and a model small enough to understand completely.
+3. Run an identifiability check: what do the data determine, and which experiment would
+   determine the rest?
+
+**Step 3. Coursework, in parallel with Steps 1–2**
+- Take a transport phenomena or fluid mechanics course, and a systems biology or quantitative
+  cell biology course. These are the Stage 4 prerequisites and also help Stage 3.
+
+**Step 4. After the Stage 2 paper: Stage 3 at full intensity, then Stage 4**
+- Stage 4 starts only with facility access (microfluidics, AFM) and a collaborator.
+  Begin with the part that reuses Stage 2: spore dispersal and trap placement.
+
 ## Stage 1: Foundation (this repository)
 
 *Deduction and Induction in One Diagram*: the semantics, the Bayesian and defeasible extensions,
