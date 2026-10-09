@@ -1,0 +1,47 @@
+\section{Deduction}\label{sec:deduction}
+
+\begin{proposition}[Material implication]\label{prop:imp}
+For propositions $p,q$, $(p\to q)\iff(\neg p\vee q)$.
+\lean{imp\_iff\_not\_or}
+\end{proposition}
+
+\begin{proof}
+If $p\to q$, then either $p$ holds and so $q$ holds, or $\neg p$ holds; this case split uses the
+law of excluded middle. Conversely, if $\neg p\vee q$ and $p$, the first disjunct is impossible,
+so $q$.
+\end{proof}
+
+\begin{theorem}[Deduction is certain]\label{thm:sound}
+If $\varphi\models\psi$ and $\varphi(w)$, then $\psi(w)$.
+\lean{deduction\_sound}
+\end{theorem}
+
+\begin{proof}
+By \cref{def:entails}, $w$ lies in the set of worlds satisfying $\varphi$, which is contained in
+the set satisfying $\psi$.
+\end{proof}
+
+\begin{proposition}[Chains of deduction]
+If $\varphi\models\psi$ and $\psi\models\chi$, then $\varphi\models\chi$.
+\lean{Entails.trans}
+\end{proposition}
+
+\begin{proof}
+Set inclusion is transitive.
+\end{proof}
+
+\begin{proposition}[Negative polarity is modus tollens]\label{prop:tollens}
+If $\varphi\models\psi$ and $\psi(w)^{\down}$, then $\varphi(w)^{\down}$.
+\lean{modus\_tollens}
+\end{proposition}
+
+\begin{proof}
+If $\varphi(w)$ held, \cref{thm:sound} would give $\psi(w)$, contradicting $\neg\psi(w)$.
+\end{proof}
+
+\begin{example}[Deductive swan]
+Let $B$ be a set of birds with predicates $\mathrm{Swan}$ and $\mathrm{White}$. If
+$\forall b,\ \mathrm{Swan}(b)\to\mathrm{White}(b)$ and $\mathrm{Swan}(a)$, then
+$\mathrm{White}(a)$. In the diagram this is $\varphi\to\exists^{\up}$.
+\lean{swan\_syllogism}
+\end{example}

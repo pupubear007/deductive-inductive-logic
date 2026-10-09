@@ -1,0 +1,54 @@
+\section{The foundation}\label{sec:foundation}
+
+\begin{definition}[Foundation map]
+Let $I$, $H$, $L$ be sets of iterations, hypotheses and levels, and let
+$\beta:I\times H\times L\to\Phi$ assign a base thought to each index. The \emph{foundation map}
+$m:I\times H\times L\times\{0,1\}\to\Phi$ is
+\[
+  m(i,h,l,1)=\beta(i,h,l),\qquad m(i,h,l,0)=\neg\beta(i,h,l).
+\]
+\end{definition}
+
+Thus state $1$ carries polarity $\up$ and state $0$ carries polarity $\down$. Since existences
+are thoughts (\cref{sec:setting}), $m$ takes values in $\Phi$.
+
+\begin{proposition}[The binary state is the truth value]\label{prop:m}
+For every world $w$ and $b\in\{0,1\}$, $m(i,h,l,b)(w)$ holds if and only if $\beta(i,h,l)(w)$
+agrees with $b$, that is, $\beta(i,h,l)(w)\iff b=1$.
+\lean{m\_spec}
+\end{proposition}
+
+\begin{proof}
+For $b=1$ both sides say $\beta(i,h,l)(w)$. For $b=0$ both sides say $\neg\beta(i,h,l)(w)$.
+\end{proof}
+
+\subsection{Ordered levels}\label{sec:levels}
+
+The indices $i,h,l$ are uninterpreted. We now order the levels, reading lower levels as
+observational and higher ones as theoretical.
+
+\begin{definition}[Hierarchy]\label{def:hierarchy}
+Let $L$ be preordered. A \emph{hierarchy} assigns a thought $\beta_l$ to each level so that
+$l\le l'$ implies $\beta_{l'}\models\beta_l$: a theory entails its observable consequences. Given
+a study $s$, level $l$ is \emph{established} if $s\models\beta_l$ and \emph{tenable} if
+$s\circlearrowright\beta_l$.
+\lean{Hierarchy}
+\end{definition}
+
+\begin{theorem}[Iteration moves upward]\label{thm:upward}
+Established and tenable levels form down-sets. If every observation of $s$ occurs in $s'$, every
+level established by $s$ is established by $s'$, and every level tenable given $s'$ is tenable
+given $s$. If $s$ is satisfiable, every established level is tenable.
+\lean{Hierarchy.Established.mono}
+\end{theorem}
+
+\begin{proof}
+Down-sets: entailment is transitive, and a world satisfying $\beta_{l'}$ satisfies $\beta_l$. A
+world satisfying $s'$ satisfies $s$, so $s\models\beta_l$ gives $s'\models\beta_l$; the tenable case
+is \cref{thm:mono}. A world satisfying $s$ then satisfies every established $\beta_l$.
+\end{proof}
+
+Iteration therefore raises the floor of established levels and lowers the ceiling of tenable
+ones, with the floor below the ceiling as long as the study is consistent. Along an iteration
+$i\mapsto s_i$ that only adds observations, a level established at step $i$ stays established at
+every later step (\texttt{Hierarchy.Established.iterate}).

@@ -20,8 +20,9 @@ keywords:
 abstract: >-
   Lean 4 formalization and LaTeX source of a paper giving a diagrammatic and
   possible-worlds account of deductive and inductive reasoning, with Bayesian
-  confirmation, defeasible inference, ordered levels, and a quantum information
-  model. Every theorem of the paper is machine-checked.
+  confirmation, defeasible inference, ordered levels, and applications to plant
+  disease diagnosis and forecasting and to quantum information. Every theorem of
+  the paper is machine-checked.
 preferred-citation:
   type: article
   title: "Deduction and Induction in One Diagram: A Machine-Checked Semantics with Applications to Quantum Information and Plant Disease Diagnosis"
