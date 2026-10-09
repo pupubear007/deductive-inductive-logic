@@ -1,25 +1,18 @@
 \begin{abstract}
-We give a diagrammatic representation of deductive and inductive reasoning in which deduction is a
-certain passage from thought to existence, $\varphi \to \exists$, and induction is a tentative,
-iterated passage from the study of existence to the theory of thought, $s\exists \circlearrowright
-t\varphi$. We make the diagram precise in a possible-worlds semantics: thoughts are propositions
-about worlds, deduction is semantic entailment, polarity $\up,\down$ distinguishes affirmation from
-modus tollens, and an inductive theory is supported by a study when some world is consistent with
-both. Within this setting we prove that deduction is sound and transitive, that iterated
-observation can only narrow the supported theories, that a single counterexample falsifies a
-universal theory, and that no finite study entails a universal theory over an unobserved
-individual. The last statement is a formal version of Hume's problem of induction. As an
-application we realize the framework in quantum information theory: thoughts become subspaces,
-deduction becomes certain measurement and unitary evolution, induction becomes state tomography,
-and the classical setting is recovered as the case of commuting observables. The quantum model
-reproduces refinement, falsification and underdetermination; measurements in a single basis
-never determine a quantum state. As a second application we read plant disease diagnosis and
-forecasting in the framework: diagnosis is elimination and refinement, Koch's postulates are
-hypothetico-deductive confirmation, forecasting rules are defeasible, and a new theorem
-characterizes when an assay can resolve a diagnosis, of which the quantum basis limitation is
-an instance. We
-further give a Bayesian refinement of support, under which every genuine test a theory predicts
-confirms it, a ranked semantics for defeasible inference, and an order on levels under which
-iteration moves upward. Every theorem of the paper is verified in the Lean~4 proof assistant with
-Mathlib.
+We give a diagrammatic representation of deductive and inductive reasoning: deduction is a certain
+passage from thought to existence, $\varphi\to\exists$, and induction a tentative, iterated passage
+from the study of existence to the theory of thought, $s\exists\circlearrowright t\varphi$. We make
+the diagram precise in a possible-worlds semantics, in which deduction is semantic entailment and a
+theory is supported by a study when some world is consistent with both. We prove that deduction is
+sound and transitive, that iterated observation can only narrow the supported theories, that a
+single counterexample falsifies a universal theory, and that no finite study entails a universal
+theory over an unobserved individual, which is the logical part of Hume's problem of induction. A
+Bayesian refinement shows that every genuine test a theory predicts confirms it; a ranked semantics
+treats defeasible inference; and ordered levels show iteration moving upward. We apply the
+framework to plant disease diagnosis and forecasting: diagnosis is elimination and refinement,
+Koch's postulates are hypothetico-deductive confirmation, forecasting rules are defeasible, and a
+new theorem characterizes when an assay can resolve a diagnosis. A quantum information model
+realizes the same structure, with the classical setting as the case of commuting observables and
+the single-basis limit of state tomography as an instance of assay resolution. Every theorem is
+verified in the Lean~4 proof assistant with Mathlib.
 \end{abstract}

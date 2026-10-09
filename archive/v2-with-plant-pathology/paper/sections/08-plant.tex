@@ -1,0 +1,183 @@
+\section{Application: plant disease diagnosis and forecasting}\label{sec:plant}
+
+Plant disease diagnosis and forecasting use both arrows of the diagram every day. A
+diagnostician reasons from a causal hypothesis to what must be observed, which is deduction, and
+from symptoms, signs and assay results to the hypotheses they leave open, which is induction. A
+forecast reasons from weather and field conditions to the risk of disease and is revised season by
+season. Unlike \cref{sec:quantum}, this application needs no mathematics beyond
+\cref{sec:setting,sec:deduction,sec:induction} and one new definition, the resolution of an
+assay (\cref{def:resolves}). Diagnosis and disease management decisions have long been studied
+quantitatively in plant disease epidemiology~\cite{hughes1999,madden2007}; the aim here is to
+place them in the framework, not to replace those methods.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.62\textwidth}@{}}
+\toprule
+Symbol & Plant pathology \\
+\midrule
+$\W$ (worlds) & candidate states of a plant or field: causal agent (if any), host, conditions \\
+$\varphi$, $t$ & a diagnosis (``the cause is $X$'') or a disease-risk model \\
+$\exists$ & a symptom, a sign, or the result of an assay \\
+$s$ (study) & a diagnostic work-up, or the record of past seasons \\
+$\models$ (hence) & the hypothesis predicts the observation \\
+$\circlearrowright$ (conclude) & the diagnosis remains consistent with the record \\
+$i$ (iteration) & a further assay, or a further season \\
+$h$ (hypothesis index) & the choice of assay (\cref{def:resolves}) \\
+$\up,\down$ & a positive or negative result; disease forecast or not \\
+\bottomrule
+\end{tabular}
+\caption{Plant-pathology reading of the symbols of \cref{tab:symbols}.}
+\label{tab:plant}
+\end{table}
+
+\subsection{Elimination and refinement}
+
+The deductive results of \cref{sec:deduction} and the refinement results of
+\cref{sec:induction} apply without change. If a diagnosis $H$ entails an observation $o$ and $o$
+fails, $H$ is eliminated (\cref{prop:tollens}); this is why one clean negative result can end a
+candidate diagnosis. Each further result can only shrink the set of diagnoses that remain
+supported (\cref{thm:mono}), so a diagnosis once eliminated returns only if an earlier result is
+withdrawn.
+
+\subsection{Assay resolution}
+
+\begin{definition}[Assay and resolution]\label{def:resolves}
+An \emph{assay} is a map $a:\W\to R$ to a set of results $R$, and the observation ``$a$ gave
+$r$'' is the thought $[a=r]$, which holds in $w$ when $a(w)=r$. The assay $a$ \emph{resolves} a
+diagnosis $H$ if worlds with the same result agree on $H$:
+\[
+  a(w)=a(w')\ \Longrightarrow\ \bigl(H(w)\iff H(w')\bigr)\qquad\text{for all }w,w'\in\W.
+\]
+\lean{AssayResult, Resolves}
+\end{definition}
+
+\begin{theorem}[Assay resolution]\label{thm:resolves}
+An assay $a$ resolves $H$ if and only if, for every world $w$, the result $[a=a(w)]$ entails $H$
+or entails $\neg H$.
+\lean{resolves\_iff}
+\end{theorem}
+
+\begin{proof}
+Suppose $a$ resolves $H$ and fix $w$. If $H(w)$, every $v$ with $a(v)=a(w)$ satisfies $H$, so
+$[a=a(w)]\models H$; otherwise the same argument gives $[a=a(w)]\models\neg H$. Conversely, let
+$a(w)=a(w')$. Then $w$ and $w'$ both satisfy $[a=a(w)]$; if this result entails $H$ both satisfy
+$H$, and if it entails $\neg H$ neither does.
+\end{proof}
+
+\begin{corollary}[Underdetermination by an assay]\label{cor:undetermined}
+If $a(w)=a(w')$, $H(w)$ and $\neg H(w')$, then the result $[a=a(w)]$ entails neither $H$ nor
+$\neg H$. If $a$ resolves $H$, so does the joint assay $w\mapsto(a(w),b(w))$ for any further
+assay $b$.
+\lean{undetermined, Resolves.pair\_left}
+\end{corollary}
+
+\begin{proof}
+The world $w'$ satisfies the result but not $H$, and $w$ satisfies it and $H$. For the joint
+assay, equal pairs have equal first components.
+\end{proof}
+
+Within the model, repeating an assay adds an observation that holds in exactly the worlds where the
+first one holds, so it removes no world. The limit of \cref{cor:undetermined} therefore lies in what
+the assay can tell apart, not in how often it is run. This gives the hypothesis index $h$ of the
+foundation a concrete reading: $h$ selects the assay, and the assay bounds what any study can
+reveal.
+
+\begin{example}[Formae speciales]\label{ex:fusarium}
+Pathogenic strains of \emph{Fusarium oxysporum} are classified into formae speciales by host
+specificity~\cite{jackson2024}: f.\,sp.\ \emph{cubense} causes Fusarium wilt (Panama disease) of
+banana, and f.\,sp.\ \emph{lycopersici} causes Fusarium wilt of tomato. Take a two-world model in
+which culture morphology gives the same result for both, and a host test records the host on
+which the isolate causes wilt. By \cref{cor:undetermined}, morphology does not resolve ``the
+isolate is f.\,sp.\ \emph{cubense}'', however many cultures are examined; by
+\cref{thm:resolves}, the host test does. The same pattern covers races distinguished only on
+differential hosts and cryptic species distinguished only by molecular markers.
+\lean{morphology\_not\_resolves, hostTest\_resolves}
+\end{example}
+
+\Cref{cor:undetermined} is the classical form of \cref{prop:qhume}(4): measurements in one basis
+do not resolve the phase of a spin, just as morphology does not resolve the forma specialis. What
+is specifically quantum is that no single basis is informationally complete for all states,
+whereas classically the assay that reports the world itself resolves every hypothesis.
+
+\subsection{Koch's postulates as hypothetico-deductive confirmation}
+
+Koch's postulates establish that a pathogen causes a disease by isolating it from diseased
+plants, inoculating it into healthy hosts, reproducing the symptoms and re-isolating the same
+organism~\cite{agrios2005}. The inoculation step has the form of \cref{thm:hd}.
+
+\begin{proposition}[Koch's postulates]\label{prop:koch}
+Let $H$ be ``$X$ causes the disease'' and $o$ be ``inoculating healthy hosts with $X$ reproduces
+the symptoms''. Suppose $H$ is possible, $H\models o$, and some world falsifies $o$. Then, under
+every prior on finitely many worlds, $o$ confirms $H$; and if $o$ fails, $H$ is eliminated.
+\lean{confirms\_of\_entails, modus\_tollens}
+\end{proposition}
+
+\begin{proof}
+The first claim is \cref{thm:hd} with the study $(o)$, the second \cref{prop:tollens}.
+\end{proof}
+
+The condition that $o$ could fail excludes tests that succeed whatever the cause; mock-inoculated
+controls serve this purpose in practice, by showing that the procedure itself does not produce the
+symptoms. The entailment $H\models o$ holds only under conditions favourable to disease: a
+susceptible host, enough inoculum and a suitable environment, the disease triangle of plant
+pathology~\cite{agrios2005}. A failed inoculation therefore eliminates $H$ only together with
+these auxiliary assumptions.
+
+\subsection{Diagnostic tests and forecasts}
+
+Diagnostic tests and forecasts are usually judged by counts. Of $D$ diseased and $N$ healthy
+units (plants, samples or fields), suppose $tp$ diseased and $fp$ healthy units test positive, or
+are forecast positive.
+
+\begin{proposition}[When a positive result raises the risk]\label{prop:plantconfirm}
+The share of diseased units among the positives exceeds the prevalence exactly when the
+sensitivity exceeds the false-positive rate:
+\[
+  \frac{tp}{tp+fp}>\frac{D}{D+N}\quad\iff\quad\frac{tp}{D}>\frac{fp}{N}.
+\]
+In cross-multiplied form, $D(tp+fp)<tp\,(D+N)\iff D\,fp<tp\,N$ for all natural numbers, with no
+positivity assumption.
+\lean{positive\_raises\_risk\_iff}
+\end{proposition}
+
+\begin{proof}
+Expand both products: $D\,tp+D\,fp<tp\,D+tp\,N$, and cancel $D\,tp$.
+\end{proof}
+
+\Cref{prop:plantconfirm} is \cref{def:confirm} in frequency form: a positive result confirms
+``diseased'' exactly when the test discriminates. The prevalence affects how far the risk rises,
+not whether it rises, as the prior does in \cref{cor:bswan}. Whether the higher risk justifies
+action is a separate decision, in which the risk is compared with a threshold set by the costs of
+treatment and of loss~\cite{hughes1999,madden2007}.
+
+A forecast is an assay applied before disease appears, to weather and field variables. For
+Sclerotinia stem rot of soybean, weather-based models predict whether apothecia of
+\emph{Sclerotinia sclerotiorum}, the source of ascospore inoculum, are present during flowering,
+with 67--70\% accuracy on independent data sets~\cite{willbur2018}. Three results of the framework
+apply to such forecasts.
+\begin{enumerate}
+  \item A risk model fitted to past seasons is supported by them but never entailed: the next
+        season is an unobserved individual, so \cref{thm:hume} applies with seasons in place of
+        birds.
+  \item \Cref{prop:plantconfirm} applies with ``forecast positive'' as the test.
+  \item Forecasting rules are defeasible, as the next proposition shows.
+\end{enumerate}
+
+\begin{proposition}[A defeasible forecasting rule]\label{prop:sclerotinia}
+Consider a soybean field at flowering under weather favourable to disease, with worlds
+$(\mathrm{noApothecia},\mathrm{infected})\in\{0,1\}^2$ ranked so that apothecia with infection
+is most normal, no apothecia without infection next, and the other two combinations least normal.
+Then the field is normally infected, $()\mathrel{|\!\sim}\mathrm{infected}$, but
+$(\mathrm{noApothecia})\not\mathrel{|\!\sim}\mathrm{infected}$; indeed
+$(\mathrm{noApothecia})\mathrel{|\!\sim}\neg\mathrm{infected}$.
+\lean{sclerotinia\_nonmonotone, noApothecia\_normally\_not\_infected}
+\end{proposition}
+
+The ranking is a stylized model: infection without local apothecia, for instance from ascospores
+blown in from neighbouring fields, is ranked abnormal rather than impossible. Like the Tweety
+example of \cref{prop:tweety}, the forecast is closed under the rules of \cref{thm:klm} and is
+withdrawn when new information arrives.
+
+The decision thresholds, the accuracy figures and the biological premises of the models above are
+empirical; the Lean formalization covers the logical results only.

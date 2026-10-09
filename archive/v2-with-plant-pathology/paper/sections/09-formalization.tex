@@ -1,0 +1,97 @@
+\section{Lean formalization}\label{app:formalization}
+
+All theorems of the paper are formalized in Lean~4 (toolchain \texttt{v4.34.1}) in the
+directory \path{lean/WangLogic/} of the repository given under Code availability.
+\path{Basic.lean} covers Sections~\ref{sec:setting}--\ref{sec:foundation} except the extensions
+below and uses only the core library. The other files use Mathlib~\cite{mathlib} (commit
+\texttt{d13f23b7}): \path{Confirmation.lean} (\cref{rem:probability} and
+\cref{sec:confirmation}), \path{Defeasible.lean} (\cref{sec:defeasible}), \path{Levels.lean}
+(\cref{sec:levels}), \path{Quantum.lean}
+(\cref{prop:qsound,prop:classical,prop:qhume}) and \path{QuantumExtensions.lean}
+(\cref{prop:unitary,prop:nondistrib,prop:noise} and entropy invariance), and \path{Plant.lean}
+(\cref{sec:plant}), which uses only the core library besides \path{Basic.lean} and
+\path{Defeasible.lean}. No file contains
+\texttt{sorry}, and every declaration depends at most on the axioms \texttt{propext},
+\texttt{Quot.sound} and \texttt{Classical.choice}. The project builds with
+\begin{center}\texttt{cd lean \&\& lake exe cache get \&\& lake build}\end{center}
+The file \path{lean/ComparatorChallenges/InductionNotDeduction.json} states
+\cref{thm:hume} for independent checking with the Comparator tool
+(\url{https://github.com/leanprover/comparator}). Not formalized: Landauer's
+principle, the inequality $H(T\mid S)\le H(T)$, and the physical implementations and experimental
+proposals of \cref{sec:quantum}.
+
+\paragraph{Conventions.} In \cref{sec:confirmation} the set of worlds is finite and a prior is a
+strictly positive weight; probabilities are normalized sums of weights. In
+\cref{sec:defeasible} a ranking takes values in $\mathbb N$.
+In \cref{prop:qsound} a projector is the
+orthogonal projection \texttt{K.starProjection} onto a subspace $K$ of a finite-dimensional complex
+inner product space, and $P\le Q$ is inclusion of subspaces; \texttt{starProjection\_comp\_eq\_iff}
+proves that this agrees with $QP=P$, and \texttt{starProjection\_orthogonal\_eq\_sub} that
+$I-P$ projects onto $K^\perp$. In \cref{prop:classical,prop:qhume} operators are complex matrices,
+a projector is a Hermitian idempotent matrix, a density operator is a positive semidefinite matrix of
+trace $1$, and the Born probability is $\operatorname{Re}\Tr(\rho P)$. In \cref{prop:classical}
+the order $P\le Q$ is used in its algebraic form $QP=P$, and in \cref{prop:qhume} $\ket\up$ and
+$\ket\down$ are the standard basis vectors of $\mathbb C^2$. In part~(2) of \cref{prop:qhume},
+``$\ket\up$ is the maximum-likelihood state'' is proved in the form: the likelihood of $\ket\up$
+is at least that of every density operator. \Cref{prop:unitary,prop:noise} use the same matrix model, with
+unitarity written $U^\dagger U=I$; \cref{prop:nondistrib} uses the lattice of subspaces of
+$\mathbb C^2$; and the entropy $S(\rho)$ is $\sum_k-\lambda_k\ln\lambda_k$ over the roots of the
+characteristic polynomial, which for Hermitian $\rho$ are its eigenvalues
+(\texttt{vonNeumannEntropy\_eq\_sum\_eigenvalues}).
+
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Result & Lean declaration (namespace \texttt{WangLogic}) \\
+\midrule
+\Cref{def:entails} & \texttt{Entails} \\
+\Cref{def:support} & \texttt{Supported} \\
+\Cref{prop:imp} & \texttt{imp\_iff\_not\_or} \\
+\Cref{thm:sound} & \texttt{deduction\_sound} \\
+\Cref{prop:tollens} & \texttt{modus\_tollens} \\
+\Cref{prop:cons} & \texttt{Supported.of\_cons} \\
+\Cref{thm:mono} & \texttt{Supported.mono} \\
+\Cref{prop:popper} & \texttt{falsification} \\
+\Cref{thm:hume} & \texttt{induction\_not\_deduction} \\
+\Cref{prop:supported} & \texttt{allWhite\_supported} \\
+\Cref{prop:m} & \texttt{m\_spec} \\
+\midrule
+\Cref{rem:probability} & \texttt{Prior.prob\_and\_pos\_iff\_supported} \\
+\Cref{def:confirm} & \texttt{Prior}, \texttt{Confirms}, \texttt{Disconfirms} \\
+\Cref{prop:confsupp} & \texttt{Confirms.supported} \\
+\Cref{thm:hd} & \texttt{confirms\_of\_entails} \\
+\Cref{prop:ascend} & \texttt{condProb\_mono} \\
+\Cref{prop:qpopper} & \texttt{Disconfirms.of\_refutes} \\
+\Cref{cor:bswan} & \texttt{allWhite\_confirmed}, \texttt{allWhite\_condProb\_mono} \\
+\Cref{def:normally} & \texttt{Normally}, \texttt{NormallyFrom} \\
+\Cref{thm:klm} & \texttt{Normally.of\_entails}, \texttt{.and}, \texttt{.or}, \texttt{.cut}, \texttt{.cautious\_mono} \\
+\Cref{prop:tweety} & \texttt{normally\_nonmonotone} \\
+\Cref{def:hierarchy} & \texttt{Hierarchy} \\
+\Cref{thm:upward} & \texttt{Hierarchy.Established.of\_le}, \texttt{.mono}, \texttt{.tenable}, \\
+ & \texttt{Hierarchy.Tenable.of\_le}, \texttt{.anti} \\
+\midrule
+\Cref{prop:qsound} & \texttt{quantum\_deduction\_sound} \\
+\Cref{prop:classical}(1) & \texttt{classicalProj\_le\_iff}, \texttt{classicalProj\_not} \\
+\Cref{prop:classical}(2) & \texttt{classical\_trace\_pos\_iff} \\
+\Cref{prop:qhume}(1) & \texttt{QSupported.of\_concat}, \texttt{likelihood\_concat\_le} \\
+\Cref{prop:qhume}(2) & \texttt{spinState\_supported}, \texttt{spinUp\_maxLikelihood} \\
+\Cref{prop:qhume}(3) & \texttt{spinUp\_refuted} \\
+\Cref{prop:qhume}(4) & \texttt{likelihood\_spinState\_phase} \\
+\Cref{prop:unitary} & \texttt{unitary\_deduction}, \texttt{born\_unitary\_conj} \\
+\Cref{prop:nondistrib} & \texttt{quantum\_not\_distributive} \\
+Entropy invariance (\cref{sec:quantum}) & \texttt{vonNeumannEntropy\_unitary\_conj} \\
+\Cref{prop:noise} & \texttt{born\_depolarize\_ge}, \texttt{noisy\_spinUp\_not\_refuted} \\
+\midrule
+\Cref{def:resolves} & \texttt{AssayResult}, \texttt{Resolves} \\
+\Cref{thm:resolves} & \texttt{resolves\_iff} \\
+\Cref{cor:undetermined} & \texttt{undetermined}, \texttt{Resolves.pair\_left} \\
+\Cref{ex:fusarium} & \texttt{morphology\_not\_resolves}, \\
+ & \texttt{hostTest\_resolves} \\
+\Cref{prop:koch} & \texttt{confirms\_of\_entails}, \texttt{modus\_tollens} \\
+\Cref{prop:plantconfirm} & \texttt{positive\_raises\_risk\_iff} \\
+\Cref{prop:sclerotinia} & \texttt{apothecia\_normally\_infected}, \\
+ & \texttt{noApothecia\_normally\_not\_infected}, \\
+ & \texttt{sclerotinia\_nonmonotone} \\
+\bottomrule
+\end{tabular}
+\end{center}

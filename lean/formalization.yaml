@@ -4,7 +4,7 @@ version: "v0.4"
 
 project:
   name: "Deductive and inductive logic, formalized"
-  description: "Lean formalization of every theorem of the paper: the possible-worlds semantics of deduction and induction (Sections 3–6, core Lean), and with Mathlib the Bayesian confirmation, defeasible inference and ordered-level extensions (Sections 5.3, 5.4, 6.1) and the quantum information model (Section 7)."
+  description: "Lean formalization of every theorem of the paper: the possible-worlds semantics of deduction and induction (Sections 3–6, core Lean), and with Mathlib the Bayesian confirmation, defeasible inference and ordered-level extensions (Sections 5.3, 5.4, 6.1) the quantum information model (Section 7) and plant disease diagnosis and forecasting (Section 8)."
   authors: ["Hsuan Fu Wang"]
   license: "Apache-2.0"
 
